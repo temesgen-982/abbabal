@@ -9,6 +9,7 @@
 		type PlaygroundEndpoint,
 	} from "$lib/playground/api";
 	import { Button } from "$lib/components/ui/button";
+	import Seo from "$lib/seo/Seo.svelte";
 
 	const endpointOptions = [
 		{ value: "random", label: "GET /proverbs/random" },
@@ -160,6 +161,12 @@
 	}
 </script>
 
+
+<Seo
+	title="API Playground — Try the Abbabal Proverbs API"
+	description="Test the Abbabal REST API interactively: try list, search, random, and lookup endpoints for Amharic proverbs with translations."
+	path="/playground"
+/>
 
 <div class="mx-auto max-w-7xl px-4 py-16 text-foreground">
 	<section class="mb-16 flex flex-col items-center gap-12 text-center lg:flex-row lg:text-left">

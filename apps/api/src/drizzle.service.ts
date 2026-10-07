@@ -5,7 +5,7 @@ import { getDb, closeDb } from './db';
 export class DrizzleService {
   readonly db = getDb();
 
-  async onModuleDestroy() {
+  onModuleDestroy() {
     closeDb();
   }
 }

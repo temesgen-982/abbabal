@@ -15,7 +15,9 @@ export class AppService {
   getStats() {
     const db = getDb();
     const [proverbRow] = db.prepare('SELECT COUNT(*) as c FROM proverbs').all();
-    const [interpRow] = db.prepare('SELECT COUNT(*) as c FROM interpretations').all();
+    const [interpRow] = db
+      .prepare('SELECT COUNT(*) as c FROM interpretations')
+      .all();
 
     const fileStat = statSync(getDbPath());
 

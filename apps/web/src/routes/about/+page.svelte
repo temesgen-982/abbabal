@@ -1,7 +1,14 @@
 <script lang="ts">
   import { BookOpen, Download, Database, Heart, Shield, Code, Leaf, Users, ArrowRight, ExternalLink } from '@lucide/svelte';
   import DataSource from '$lib/components/DataSource.svelte';
+  import Seo from '$lib/seo/Seo.svelte';
 </script>
+
+<Seo
+  title="About Abbabal — Preserving Amharic Proverb Heritage"
+  description="Learn how Abbabal collects, verifies, and shares Amharic proverbs (አባባሎች) as an open, CC BY 4.0 dataset for everyone."
+  path="/about"
+/>
 
 <div class="mx-auto max-w-7xl px-6">
   <!-- Hero -->

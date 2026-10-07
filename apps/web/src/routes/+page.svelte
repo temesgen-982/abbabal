@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import {
     ArrowRight,
     BookOpen,
@@ -15,21 +14,12 @@
   } from '@lucide/svelte';
   import type { PageData } from './$types';
   import DataSource from '$lib/components/DataSource.svelte';
+  import Seo from '$lib/seo/Seo.svelte';
+  import { getSiteUrl } from '$lib/seo/site.js';
 
   let { data }: { data: PageData } = $props();
 
-  let searchQuery = $state('');
   let copied = $state(false);
-
-  function handleSearch(e: Event) {
-    e.preventDefault();
-    const q = searchQuery.trim();
-    if (q) {
-      goto(`/proverbs?search=${encodeURIComponent(q)}`);
-    } else {
-      goto('/proverbs');
-    }
-  }
 
   const stats = $derived([
     { label: 'Proverbs', value: data.proverbCount ? Number(data.proverbCount).toLocaleString() : '—', icon: BookOpen },
@@ -55,9 +45,46 @@
     }
   }
 
-  function formatDate(date: string) {
-    return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  function formatDate(value: string | number | null | undefined) {
+    if (value === null || value === undefined || value === '') return '';
+    const raw = String(value).trim();
+    const ms = /^\d+$/.test(raw)
+      ? Number(raw) < 1e12
+        ? Number(raw) * 1000
+        : Number(raw)
+      : Date.parse(raw);
+    const d = new Date(ms);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
+
+  const proverbCount = $derived(data.proverbCount);
+  const pageTitle = $derived(
+    proverbCount
+      ? `Abbabal — ${Number(proverbCount).toLocaleString()} Amharic Proverbs (አባባሎች) with Meanings`
+      : 'Abbabal — Amharic Proverbs (አባባሎች) with Meanings'
+  );
+  const pageDescription = $derived(
+    `Explore ${proverbCount ? Number(proverbCount).toLocaleString() : '3,000'}+ Amharic proverbs (አባባሎች) with English translations, meanings, and cultural context. Browse, search, and download the open dataset.`
+  );
+
+  const websiteJsonLd = $derived({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Abbabal',
+    alternateName: 'አባባሎች',
+    url: getSiteUrl(),
+    description: pageDescription,
+    inLanguage: ['en', 'am'],
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${getSiteUrl()}/proverbs?search={search_term_string}`
+      },
+      'query-input': 'required name=search_term_string'
+    }
+  });
 
   // Real proverbs from the corpus, used in the editorial section
   const examples = [
@@ -66,6 +93,8 @@
     { id: 990, amharic: 'ቀላዋጭ ወጥ ያውቃል', translation: 'The stirrer knows the stew.' },
   ];
 </script>
+
+<Seo title={pageTitle} description={pageDescription} path="/" jsonLd={websiteJsonLd} />
 
 <div class="mx-auto max-w-7xl px-6">
   <!-- Hero -->
@@ -79,11 +108,11 @@
       <p class="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
         Abbabal is a collection of {data.proverbCount ? Number(data.proverbCount).toLocaleString() : '3,000'}+ Amharic proverbs — preserving our heritage, sharing our wisdom.
       </p>
-      <form onsubmit={handleSearch} class="mt-8 flex max-w-md items-center rounded-xl border border-border bg-card pl-5 pr-1.5 py-1.5 shadow-sm">
+      <form action="/proverbs" method="get" class="mt-8 flex max-w-md items-center rounded-xl border border-border bg-card pl-5 pr-1.5 py-1.5 shadow-sm">
         <Search size={16} class="mr-3 shrink-0 text-muted-foreground" />
         <input
           type="text"
-          bind:value={searchQuery}
+          name="search"
           placeholder="Search proverbs in Amharic or English..."
           class="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
         />

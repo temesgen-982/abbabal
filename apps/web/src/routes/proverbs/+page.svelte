@@ -1,8 +1,10 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { resolve } from '$app/paths';
   import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, List, Grid, Bookmark, Volume2, Shuffle } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
+  import Seo from '$lib/seo/Seo.svelte';
+  import { getSiteUrl } from '$lib/seo/site.js';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
@@ -12,23 +14,48 @@
   let viewMode = $state<'list' | 'grid'>('list');
 
   const totalPages = $derived(Math.max(1, Math.ceil(data.total / data.limit)));
+  const isSearch = $derived(Boolean(data.searchQuery));
 
-  function doSearch(e: Event) {
-    e.preventDefault();
-    const q = searchInput.trim();
-    if (q) {
-      goto(`/proverbs?search=${encodeURIComponent(q)}`);
-    } else {
-      goto('/proverbs');
+  function pageHref(p: number): '/proverbs' | `/proverbs?page=${number}` {
+    const clamped = Math.min(Math.max(p, 1), totalPages);
+    return clamped === 1 ? '/proverbs' : `/proverbs?page=${clamped}`;
+  }
+
+  const seoPath = $derived(
+    isSearch ? '/proverbs' : data.page > 1 ? `/proverbs?page=${data.page}` : '/proverbs'
+  );
+
+  const seoTitle = $derived(
+    isSearch
+      ? `${data.searchQuery} — Amharic Proverbs | Abbabal`
+      : `Amharic Proverbs — Browse ${data.total.toLocaleString()} with Meanings | Abbabal`
+  );
+
+  const seoDescription = $derived(
+    isSearch
+      ? `Search results for “${data.searchQuery}” in the Abbabal archive of Amharic proverbs (አባባሎች) with translations and meanings.`
+      : `Browse and search ${data.total.toLocaleString()}+ Amharic proverbs (አባባሎች). Each proverb includes English translations, explanations, and cultural context from the open Abbabal archive.`
+  );
+
+  const collectionJsonLd = $derived({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Amharic Proverbs',
+    alternateName: 'የአማርኛ አባባሎች',
+    url: `${getSiteUrl()}/proverbs`,
+    description: seoDescription,
+    inLanguage: ['en', 'am'],
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: data.total,
+      itemListElement: data.proverbs.map((proverb: { id: number; text: string }, i: number) => ({
+        '@type': 'ListItem',
+        position: (data.page - 1) * data.limit + i + 1,
+        url: `${getSiteUrl()}/proverbs/${proverb.id}`,
+        name: proverb.text
+      }))
     }
-  }
-
-  function goToPage(p: number) {
-    if (p < 1 || p > totalPages) return;
-    const params = new URLSearchParams($page.url.searchParams);
-    params.set('page', String(p));
-    goto(`/proverbs?${params.toString()}`);
-  }
+  });
 
   function goToRandom() {
     const id = Math.floor(Math.random() * (data.proverbCount ?? 7576)) + 1;
@@ -62,6 +89,14 @@
   const endResult = $derived(Math.min(data.page * data.limit, data.total));
 </script>
 
+<Seo
+  title={seoTitle}
+  description={seoDescription}
+  path={seoPath}
+  noindex={isSearch}
+  jsonLd={collectionJsonLd}
+/>
+
 <div class="mx-auto max-w-7xl px-6">
   <!-- Header -->
   <div class="py-8">
@@ -76,11 +111,12 @@
 
   <!-- Search + Controls Row -->
   <div class="mb-6 grid items-center gap-4 md:grid-cols-[1fr_auto]">
-    <form onsubmit={doSearch} class="relative">
+    <form action="/proverbs" method="get" class="relative">
       <Search size={16} class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
       <input
         type="text"
-        bind:value={searchInput}
+        name="search"
+        value={searchInput}
         placeholder="Search proverbs in Amharic or English..."
         class="w-full rounded-xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none shadow-sm placeholder:text-muted-foreground/60"
       />
@@ -229,38 +265,39 @@
 
       <!-- Pagination -->
       {#if data.total > data.limit}
-        <div class="mt-8 flex items-center justify-center gap-2">
-          <button
-            onclick={() => goToPage(data.page - 1)}
-            disabled={data.page <= 1}
-            class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary disabled:opacity-40 disabled:pointer-events-none"
+        <nav class="mt-8 flex items-center justify-center gap-2" aria-label="Proverb pages">
+          <a
+            href={resolve(pageHref(data.page - 1))}
+            aria-disabled={data.page <= 1}
+            class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary {data.page <= 1 ? 'pointer-events-none opacity-40' : ''}"
           >
             <ChevronLeft size={14} />
             Previous
-          </button>
+          </a>
 
           {#each pageNumbers as p}
             {#if p === '...'}
               <span class="px-1 text-xs text-muted-foreground">...</span>
             {:else}
-              <button
-                onclick={() => goToPage(p)}
+              <a
+                href={resolve(pageHref(p))}
+                aria-current={p === data.page ? 'page' : undefined}
                 class="flex h-9 w-9 items-center justify-center rounded-lg text-xs font-semibold transition-colors {p === data.page ? 'bg-primary text-primary-foreground' : 'border border-border bg-card hover:border-primary hover:text-primary'}"
               >
                 {p}
-              </button>
+              </a>
             {/if}
           {/each}
 
-          <button
-            onclick={() => goToPage(data.page + 1)}
-            disabled={data.page >= totalPages}
-            class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary disabled:opacity-40 disabled:pointer-events-none"
+          <a
+            href={resolve(pageHref(data.page + 1))}
+            aria-disabled={data.page >= totalPages}
+            class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary {data.page >= totalPages ? 'pointer-events-none opacity-40' : ''}"
           >
             Next
             <ChevronRight size={14} />
-          </button>
-        </div>
+          </a>
+        </nav>
       {/if}
     </div>
   </div>

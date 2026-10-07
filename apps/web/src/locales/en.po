@@ -11,6 +11,7 @@ msgstr ""
 #: src/routes/+page.svelte
 #: src/routes/download/+page.svelte
 #: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/[id]/+page.svelte
 msgid "Proverbs"
 msgstr "Proverbs"
 
@@ -132,6 +133,8 @@ msgstr "New proverbs added regularly from our community."
 
 #: src/lib/components/Footer.svelte
 #: src/lib/components/Nav.svelte
+#: src/lib/seo/Seo.svelte
+#: src/routes/+page.svelte
 msgid "Abbabal"
 msgstr "Abbabal"
 
@@ -154,6 +157,7 @@ msgid "Download"
 msgstr "Download"
 
 #: src/lib/components/Nav.svelte
+#: src/routes/proverbs/[id]/+page.svelte
 msgid "Home"
 msgstr "Home"
 
@@ -1190,46 +1194,43 @@ msgstr "Pending Review"
 msgid "Rejected"
 msgstr "Rejected"
 
-#. 0: amharicText
-#: src/routes/proverbs/[id]/+page.svelte
-msgid "{0} — Abbabal"
-msgstr "{0} — Abbabal"
+#~ msgid "{0} — Abbabal"
+#~ msgstr "{0} — Abbabal"
 
-#: src/routes/proverbs/[id]/+page.svelte
-msgid "Proverb — Abbabal"
-msgstr "Proverb — Abbabal"
+#~ msgid "Proverb — Abbabal"
+#~ msgstr "Proverb — Abbabal"
 
-#: src/routes/proverbs/[id]/+page.svelte
-msgid "Amharic proverb from the Abbabal archive"
-msgstr "Amharic proverb from the Abbabal archive"
+#~ msgid "Amharic proverb from the Abbabal archive"
+#~ msgstr "Amharic proverb from the Abbabal archive"
 
-#: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/proverbs/[id]/+page.ts
+#: src/routes/proverbs/[id]/+page.ts
+#: src/routes/proverbs/[id]/+page.ts
 msgid "Proverb not found"
 msgstr "Proverb not found"
 
-#: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/+error.svelte
+#: src/routes/+error.svelte
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
-#: src/routes/proverbs/[id]/+page.svelte
-msgid "This proverb doesn't exist in our archive. It may have been removed or the link is incorrect."
-msgstr "This proverb doesn't exist in our archive. It may have been removed or the link is incorrect."
+#~ msgid "This proverb doesn't exist in our archive. It may have been removed or the link is incorrect."
+#~ msgstr "This proverb doesn't exist in our archive. It may have been removed or the link is incorrect."
 
-#: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/proverbs/[id]/+page.ts
 msgid "Couldn't reach the archive. Check your connection and try again."
 msgstr "Couldn't reach the archive. Check your connection and try again."
 
-#: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/proverbs/[id]/+page.ts
 msgid "The archive is temporarily unavailable. Please try again shortly."
 msgstr "The archive is temporarily unavailable. Please try again shortly."
 
-#: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/+error.svelte
 msgid "<0/> Browse proverbs"
 msgstr "<0/> Browse proverbs"
 
-#: src/routes/proverbs/[id]/+page.svelte
-msgid "Try again"
-msgstr "Try again"
+#~ msgid "Try again"
+#~ msgstr "Try again"
 
 #: src/routes/proverbs/[id]/+page.svelte
 msgid "Meaning"
@@ -1498,3 +1499,164 @@ msgstr "<0/> CC BY 4.0"
 #: src/routes/download/+page.svelte
 msgid "Open Data CC BY 4.0"
 msgstr "Open Data CC BY 4.0"
+
+#. 0: Number(proverbCount).toLocaleString()
+#: src/routes/+page.svelte
+msgid "Abbabal — {0} Amharic Proverbs (አባባሎች) with Meanings"
+msgstr "Abbabal — {0} Amharic Proverbs (አባባሎች) with Meanings"
+
+#: src/routes/+page.svelte
+msgid "Abbabal — Amharic Proverbs (አባባሎች) with Meanings"
+msgstr "Abbabal — Amharic Proverbs (አባባሎች) with Meanings"
+
+#. 0: proverbCount ? Number(proverbCount).toLocaleString() \\: '3,000'
+#: src/routes/+page.svelte
+msgid "Explore {0}+ Amharic proverbs (አባባሎች) with English translations, meanings, and cultural context. Browse, search, and download the open dataset."
+msgstr "Explore {0}+ Amharic proverbs (አባባሎች) with English translations, meanings, and cultural context. Browse, search, and download the open dataset."
+
+#: src/routes/+page.svelte
+msgid "WebSite"
+msgstr "WebSite"
+
+#: src/routes/+page.svelte
+msgid "አባባሎች"
+msgstr "አባባሎች"
+
+#: src/routes/+page.svelte
+msgid "SearchAction"
+msgstr "SearchAction"
+
+#: src/routes/+page.svelte
+msgid "EntryPoint"
+msgstr "EntryPoint"
+
+#. 0: data.searchQuery
+#: src/routes/proverbs/+page.svelte
+msgid "{0} — Amharic Proverbs | Abbabal"
+msgstr "{0} — Amharic Proverbs | Abbabal"
+
+#. 0: data.total.toLocaleString()
+#: src/routes/proverbs/+page.svelte
+msgid "Amharic Proverbs — Browse {0} with Meanings | Abbabal"
+msgstr "Amharic Proverbs — Browse {0} with Meanings | Abbabal"
+
+#. 0: data.searchQuery
+#: src/routes/proverbs/+page.svelte
+msgid "Search results for “{0}” in the Abbabal archive of Amharic proverbs (አባባሎች) with translations and meanings."
+msgstr "Search results for “{0}” in the Abbabal archive of Amharic proverbs (አባባሎች) with translations and meanings."
+
+#. 0: data.total.toLocaleString()
+#: src/routes/proverbs/+page.svelte
+msgid "Browse and search {0}+ Amharic proverbs (አባባሎች). Each proverb includes English translations, explanations, and cultural context from the open Abbabal archive."
+msgstr "Browse and search {0}+ Amharic proverbs (አባባሎች). Each proverb includes English translations, explanations, and cultural context from the open Abbabal archive."
+
+#: src/routes/proverbs/+page.svelte
+msgid "CollectionPage"
+msgstr "CollectionPage"
+
+#: src/routes/proverbs/+page.svelte
+msgid "Amharic Proverbs"
+msgstr "Amharic Proverbs"
+
+#: src/routes/proverbs/+page.svelte
+msgid "የአማርኛ አባባሎች"
+msgstr "የአማርኛ አባባሎች"
+
+#: src/routes/proverbs/+page.svelte
+msgid "ItemList"
+msgstr "ItemList"
+
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "ListItem"
+msgstr "ListItem"
+
+#: src/routes/proverbs/+page.svelte
+msgid "Proverb pages"
+msgstr "Proverb pages"
+
+#. 0: amharicText
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "{0} — Amharic Proverb | Abbabal"
+msgstr "{0} — Amharic Proverb | Abbabal"
+
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "Proverb | Abbabal"
+msgstr "Proverb | Abbabal"
+
+#. 0: englishTranslation; 1: amharicText
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "{0} — meaning, explanation, and cultural context of the Amharic proverb “{1}”."
+msgstr "{0} — meaning, explanation, and cultural context of the Amharic proverb “{1}”."
+
+#. 0: amharicText
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "Meaning and explanation of the Amharic proverb “{0}” from the Abbabal archive."
+msgstr "Meaning and explanation of the Amharic proverb “{0}” from the Abbabal archive."
+
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "DefinedTerm"
+msgstr "DefinedTerm"
+
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "BreadcrumbList"
+msgstr "BreadcrumbList"
+
+#: src/routes/+error.svelte
+msgid "Page not found — Abbabal"
+msgstr "Page not found — Abbabal"
+
+#. 0: status
+#: src/routes/+error.svelte
+msgid "Error {0} — Abbabal"
+msgstr "Error {0} — Abbabal"
+
+#: src/routes/+error.svelte
+msgid "This page doesn't exist in the Abbabal archive. Browse the collection of Amharic proverbs instead."
+msgstr "This page doesn't exist in the Abbabal archive. Browse the collection of Amharic proverbs instead."
+
+#: src/routes/+error.svelte
+msgid "The page could not be loaded. Browse the Abbabal collection of Amharic proverbs instead."
+msgstr "The page could not be loaded. Browse the Abbabal collection of Amharic proverbs instead."
+
+#: src/routes/+error.svelte
+msgid "Page not found"
+msgstr "Page not found"
+
+#: src/routes/+error.svelte
+msgid "<0/> Try again"
+msgstr "<0/> Try again"
+
+#: src/routes/about/+page.svelte
+msgid "About Abbabal — Preserving Amharic Proverb Heritage"
+msgstr "About Abbabal — Preserving Amharic Proverb Heritage"
+
+#: src/routes/about/+page.svelte
+msgid "Learn how Abbabal collects, verifies, and shares Amharic proverbs (አባባሎች) as an open, CC BY 4.0 dataset for everyone."
+msgstr "Learn how Abbabal collects, verifies, and shares Amharic proverbs (አባባሎች) as an open, CC BY 4.0 dataset for everyone."
+
+#: src/routes/documentation/+page.svelte
+msgid "Abbabal API Documentation — Free Amharic Proverbs REST API"
+msgstr "Abbabal API Documentation — Free Amharic Proverbs REST API"
+
+#: src/routes/documentation/+page.svelte
+msgid "Full documentation for the free Abbabal REST API: list, search, and download thousands of Amharic proverbs with translations. No API key required."
+msgstr "Full documentation for the free Abbabal REST API: list, search, and download thousands of Amharic proverbs with translations. No API key required."
+
+#: src/routes/download/+page.svelte
+msgid "Download Amharic Proverbs Dataset & Android App | Abbabal"
+msgstr "Download Amharic Proverbs Dataset & Android App | Abbabal"
+
+#: src/routes/download/+page.svelte
+msgid "Download the open Abbabal SQLite dataset of Amharic proverbs or get the Android app for daily proverbs, search, and offline access."
+msgstr "Download the open Abbabal SQLite dataset of Amharic proverbs or get the Android app for daily proverbs, search, and offline access."
+
+#: src/routes/playground/+page.svelte
+msgid "API Playground — Try the Abbabal Proverbs API"
+msgstr "API Playground — Try the Abbabal Proverbs API"
+
+#: src/routes/playground/+page.svelte
+msgid "Test the Abbabal REST API interactively: try list, search, random, and lookup endpoints for Amharic proverbs with translations."
+msgstr "Test the Abbabal REST API interactively: try list, search, random, and lookup endpoints for Amharic proverbs with translations."

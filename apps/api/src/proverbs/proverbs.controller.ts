@@ -1,8 +1,14 @@
-import { Controller, Get, Param, Query, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags, ApiParam } from '@nestjs/swagger';
-import { Response } from 'express';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Query,
+  Res,
+} from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags, ApiParam } from '@nestjs/swagger';
+import type { Response } from 'express';
 import { ProverbsService } from './proverbs.service';
-import { resolve } from 'node:path';
 
 @ApiTags('Proverbs')
 @Controller('proverbs')
@@ -28,6 +34,13 @@ export class ProverbsController {
     return this.proverbsService.search(query, limitNumber);
   }
 
+  @Get('ids')
+  @ApiOperation({ summary: 'List all proverb ids with update timestamps' })
+  ids(@Res({ passthrough: true }) res: Response) {
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    return this.proverbsService.ids();
+  }
+
   @Get('random')
   @ApiOperation({ summary: 'Get a random proverb' })
   random() {
@@ -38,6 +51,8 @@ export class ProverbsController {
   @ApiOperation({ summary: 'Get a proverb by ID' })
   @ApiParam({ name: 'id', type: Number })
   findOne(@Param('id') id: string) {
-    return this.proverbsService.findOne(parseInt(id));
+    const proverb = this.proverbsService.findOne(parseInt(id));
+    if (!proverb) throw new NotFoundException(`Proverb ${id} not found`);
+    return proverb;
   }
 }

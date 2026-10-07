@@ -1,4 +1,5 @@
 import { PUBLIC_API_BASE_URL } from "$env/static/public";
+import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
 export interface Interpretation {
@@ -27,18 +28,14 @@ export interface Proverb {
   latestStats: ProverbStats | null;
 }
 
-export type ProverbError = "not_found" | "server_error" | "network_error";
-
-type LoadReturn =
-  | { proverb: Proverb; error: null; baseUrl: string }
-  | { proverb: null; error: ProverbError; baseUrl: string };
+type LoadReturn = { proverb: Proverb; baseUrl: string };
 
 export const load: PageLoad = async ({ fetch, params }): Promise<LoadReturn> => {
   const base = (PUBLIC_API_BASE_URL || "http://localhost:3000").replace(/\/+$/, "");
   const id = params.id;
 
   if (!id || isNaN(Number(id))) {
-    return { proverb: null, error: "not_found", baseUrl: base };
+    error(404, "Proverb not found");
   }
 
   try {
@@ -47,16 +44,20 @@ export const load: PageLoad = async ({ fetch, params }): Promise<LoadReturn> => 
     });
 
     if (response.status === 404) {
-      return { proverb: null, error: "not_found", baseUrl: base };
+      error(404, "Proverb not found");
     }
 
     if (!response.ok) {
-      return { proverb: null, error: "server_error", baseUrl: base };
+      error(500, "The archive is temporarily unavailable. Please try again shortly.");
     }
 
-    const proverb = (await response.json()) as Proverb;
-    return { proverb, error: null, baseUrl: base };
-  } catch {
-    return { proverb: null, error: "network_error", baseUrl: base };
+    const proverb = (await response.json()) as Proverb | null;
+    if (!proverb) {
+      error(404, "Proverb not found");
+    }
+    return { proverb, baseUrl: base };
+  } catch (e) {
+    if (e && typeof e === "object" && "status" in e) throw e;
+    error(500, "Couldn't reach the archive. Check your connection and try again.");
   }
 };

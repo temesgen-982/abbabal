@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import { Database, Globe, Code, Shield, Gauge, BookOpen, ArrowRight, ExternalLink, Copy, Check, Leaf } from '@lucide/svelte';
   import { PUBLIC_API_BASE_URL } from '$env/static/public';
+  import Seo from '$lib/seo/Seo.svelte';
 
   const baseUrl = $derived((PUBLIC_API_BASE_URL || 'http://localhost:3000').replace(/\/+$/, ''));
 
@@ -16,10 +17,12 @@
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   }
 
-  async function copy(text: string, setDone: (v: boolean) => void) {
+  async function copy(text: string, state?: { value: boolean }) {
     await navigator.clipboard.writeText(text);
-    setDone(true);
-    setTimeout(() => setDone(false), 2000);
+    if (state) state.value = true;
+    setTimeout(() => {
+      if (state) state.value = false;
+    }, 2000);
   }
 
   const endpoints = [
@@ -36,6 +39,12 @@
     { id: 'example', label: 'Example' },
   ];
 </script>
+
+<Seo
+  title="Abbabal API Documentation — Free Amharic Proverbs REST API"
+  description="Full documentation for the free Abbabal REST API: list, search, and download thousands of Amharic proverbs with translations. No API key required."
+  path="/documentation"
+/>
 
 <div class="mx-auto max-w-7xl px-6">
   <div class="grid gap-8 py-10 md:grid-cols-[220px_1fr] md:py-12">

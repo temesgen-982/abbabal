@@ -3,13 +3,18 @@
   import { Badge } from "$lib/components/ui/badge";
   import { Button } from "$lib/components/ui/button";
   import { goto } from "$app/navigation";
+  import Seo from "$lib/seo/Seo.svelte";
+  import { getSiteUrl } from "$lib/seo/site.js";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
 
   const p = $derived(data.proverb);
-  const err = $derived(data.error);
   const baseUrl = $derived(data.baseUrl);
+
+  function trim(text: string, max = 155) {
+    return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
+  }
 
   const amharicText = $derived(p?.text ?? "");
 
@@ -68,6 +73,45 @@
   let copied = $state(false);
   let shared = $state(false);
 
+  const proverbUrl = $derived(p ? `${getSiteUrl()}/proverbs/${p.id}` : getSiteUrl());
+
+  const seoTitle = $derived(p ? `${amharicText} — Amharic Proverb | Abbabal` : "Proverb | Abbabal");
+
+  const seoDescription = $derived(
+    trim(
+      englishTranslation
+        ? `${englishTranslation} — meaning, explanation, and cultural context of the Amharic proverb “${amharicText}”.`
+        : `Meaning and explanation of the Amharic proverb “${amharicText}” from the Abbabal archive.`
+    )
+  );
+
+  const proverbJsonLd = $derived(
+    p
+      ? {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "DefinedTerm",
+              "@id": `${proverbUrl}#term`,
+              name: amharicText,
+              description: englishMeaning ?? englishTranslation ?? seoDescription,
+              url: proverbUrl,
+              inLanguage: "am",
+              alternateName: englishTranslation ?? undefined,
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: `${getSiteUrl()}/` },
+                { "@type": "ListItem", position: 2, name: "Proverbs", item: `${getSiteUrl()}/proverbs` },
+                { "@type": "ListItem", position: 3, name: amharicText, item: proverbUrl },
+              ],
+            },
+          ],
+        }
+      : undefined
+  );
+
   async function copyText() {
     const parts = [amharicText];
     if (englishTranslation) parts.push(`"${englishTranslation}"`);
@@ -108,51 +152,10 @@
   }
 </script>
 
-<svelte:head>
-  <title>{p ? `${amharicText} — Abbabal` : "Proverb — Abbabal"}</title>
-  <meta name="description" content={englishTranslation ?? "Amharic proverb from the Abbabal archive"} />
-</svelte:head>
+<Seo title={seoTitle} description={seoDescription} path={`/proverbs/${p.id}`} jsonLd={proverbJsonLd} />
 
 <main class="text-foreground">
-  {#if err}
-    <div class="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center px-4 text-center">
-      <div class="rounded-2xl border border-border bg-card/80 p-12 shadow-sm">
-        <div class="mb-6 text-6xl">
-          {#if err === "not_found"}
-            <span class="font-serif text-7xl text-muted-foreground/30">404</span>
-          {:else}
-            <span class="font-serif text-7xl text-muted-foreground/30">!</span>
-          {/if}
-        </div>
-
-        <h1 class="font-serif text-3xl font-bold">
-          {err === "not_found" ? "Proverb not found" : "Something went wrong"}
-        </h1>
-
-        <p class="text-muted-foreground mx-auto mt-3 max-w-sm text-sm leading-6">
-          {#if err === "not_found"}
-            This proverb doesn't exist in our archive. It may have been removed or the link is incorrect.
-          {:else if err === "network_error"}
-            Couldn't reach the archive. Check your connection and try again.
-          {:else}
-            The archive is temporarily unavailable. Please try again shortly.
-          {/if}
-        </p>
-
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="/proverbs">
-            <Button variant="outline" class="gap-2">
-              <ArrowLeft size={16} />
-              Browse proverbs
-            </Button>
-          </a>
-          <Button onclick={() => window.location.reload()} class="gap-2">
-            Try again
-          </Button>
-        </div>
-      </div>
-    </div>
-  {:else if p}
+  {#if p}
     <div class="mx-auto max-w-4xl px-4 py-12 md:py-20">
       <a
         href="/proverbs"

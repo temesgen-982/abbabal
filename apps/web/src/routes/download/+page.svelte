@@ -1,10 +1,17 @@
 <script lang="ts">
   import { BookOpen, Database, Heart, Download, ExternalLink, ArrowUpRight, Smartphone } from '@lucide/svelte';
   import type { PageData } from './$types';
+  import Seo from '$lib/seo/Seo.svelte';
 
   let { data }: { data: PageData } = $props();
   let activeTab = $state<'database' | 'mobile'>('database');
 </script>
+
+<Seo
+  title="Download Amharic Proverbs Dataset & Android App | Abbabal"
+  description="Download the open Abbabal SQLite dataset of Amharic proverbs or get the Android app for daily proverbs, search, and offline access."
+  path="/download"
+/>
 
 <div class="mx-auto max-w-7xl px-6">
   <!-- Hero -->
