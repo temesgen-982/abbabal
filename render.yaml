@@ -2,7 +2,7 @@ services:
   - type: web
     name: abbabal-api
     runtime: node
-    repo: https://github.com/temesgen-982/abbabal-api-backend
+    repo: https://github.com/temesgen-982/abbabal
     region: oregon
     plan: free
     envVars:
@@ -10,6 +10,12 @@ services:
         value: '22'
       - key: PNPM_VERSION
         value: '10.15.0'
-    buildCommand: pnpm install && pnpm build:api
+      - key: CORS_ORIGIN
+        value: 'https://abbabal-api-web.vercel.app'
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+    buildCommand: pnpm install --frozen-lockfile --filter @abbabal/api... && pnpm build:api
     startCommand: pnpm --filter @abbabal/api start:prod
     healthCheckPath: /
