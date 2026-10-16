@@ -1,7 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, List, Grid, Bookmark, Volume2, Shuffle } from '@lucide/svelte';
+  import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, List, Grid, Bookmark, Volume2, Shuffle, LoaderCircle } from '@lucide/svelte';
+  import { onMount } from 'svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import Seo from '$lib/seo/Seo.svelte';
@@ -14,6 +15,17 @@
   let searchInput = $state(data.searchQuery);
   let showFilters = $state(false);
   let viewMode = $state<'list' | 'grid'>('list');
+
+  // Submitting runs a full-page GET navigation, so show immediate feedback
+  // instead of leaving the field looking inert while the results load. Reset on
+  // `pageshow` in case the browser restores the page from its back/forward cache.
+  let searching = $state(false);
+
+  onMount(() => {
+    const reset = () => (searching = false);
+    window.addEventListener('pageshow', reset);
+    return () => window.removeEventListener('pageshow', reset);
+  });
 
   const totalPages = $derived(Math.max(1, Math.ceil(data.total / data.limit)));
   const isSearch = $derived(Boolean(data.searchQuery));
@@ -119,15 +131,33 @@
 
   <!-- Search + Controls Row -->
   <div class="mb-6 grid items-center gap-4 md:grid-cols-[1fr_auto]">
-    <form action={localize('/proverbs', locale)} method="get" class="relative">
-      <Search size={16} class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+    <form
+      action={localize('/proverbs', locale)}
+      method="get"
+      onsubmit={() => (searching = true)}
+      class="flex items-center rounded-xl border border-border bg-card py-1.5 pr-1.5 pl-4 shadow-sm"
+    >
+      <Search size={16} class="mr-3 shrink-0 text-muted-foreground" />
       <input
         type="text"
         name="search"
         value={searchInput}
         placeholder="Search Amharic or English..."
-        class="w-full rounded-xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none shadow-sm placeholder:text-muted-foreground/60"
+        class="w-full bg-transparent py-1.5 text-sm outline-none placeholder:text-muted-foreground/60"
       />
+      <button
+        type="submit"
+        disabled={searching}
+        aria-busy={searching}
+        class="flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-2 text-xs font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none active:scale-95 disabled:cursor-progress disabled:opacity-80 sm:px-4"
+      >
+        {#if searching}
+          <LoaderCircle size={16} class="animate-spin" />
+        {:else}
+          <Search size={16} />
+        {/if}
+        <span class="sr-only sm:not-sr-only">Search</span>
+      </button>
     </form>
 
     <div class="flex items-center gap-3">

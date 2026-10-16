@@ -28,6 +28,11 @@ The version is shared by every workspace package: it lives in the root
   "Get the app" button opened the download page on its Database tab, hiding the
   Android app. It now opens the app tab directly, and the card itself downloads
   the APK.
+- **Web — the search fields felt unresponsive.** The homepage button gave no
+  feedback while its full-page search navigation was in flight, and the
+  `/proverbs` field had no submit button at all (Enter only). Both now show a
+  spinner and a pressed/disabled state the moment they're submitted, plus a
+  keyboard focus ring.
 
 ## [0.1.0] - 2026-10-16
 

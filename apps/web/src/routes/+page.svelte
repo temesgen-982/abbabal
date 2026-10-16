@@ -9,10 +9,12 @@
 		Database,
 		Download,
 		Heart,
+		LoaderCircle,
 		Search,
 		Shuffle,
 		Smartphone
 	} from '@lucide/svelte';
+	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import DataSource from '$lib/components/DataSource.svelte';
 	import PhoneMockup from '$lib/components/PhoneMockup.svelte';
@@ -29,6 +31,18 @@
 	const appPageHref = `${localize('/download', data.locale)}?tab=mobile`;
 
 	let copied = $state(false);
+
+	// The hero search is a plain GET form, so submitting triggers a full-page
+	// navigation and the button would otherwise sit inert until the results
+	// render. Flip this on submit to show a spinner + pressed state, and reset
+	// it on `pageshow` so returning via the back/forward cache isn't stuck.
+	let searching = $state(false);
+
+	onMount(() => {
+		const reset = () => (searching = false);
+		window.addEventListener('pageshow', reset);
+		return () => window.removeEventListener('pageshow', reset);
+	});
 
 	const stats = $derived([
 		{
@@ -140,6 +154,7 @@
 			<form
 				action={localize('/proverbs', data.locale)}
 				method="get"
+				onsubmit={() => (searching = true)}
 				class="mt-8 flex max-w-md items-center rounded-xl border border-border bg-card py-1.5 pr-1.5 pl-5 shadow-sm"
 			>
 				<Search size={16} class="mr-3 shrink-0 text-muted-foreground" />
@@ -151,9 +166,15 @@
 				/>
 				<button
 					type="submit"
-					class="flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md bg-primary p-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:px-5 sm:py-2"
+					disabled={searching}
+					aria-busy={searching}
+					class="flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md bg-primary p-2 text-xs font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none active:scale-95 disabled:cursor-progress disabled:opacity-80 sm:px-5 sm:py-2"
 				>
-					<Search size={16} />
+					{#if searching}
+						<LoaderCircle size={16} class="animate-spin" />
+					{:else}
+						<Search size={16} />
+					{/if}
 					<span class="sr-only sm:not-sr-only">Search</span>
 				</button>
 			</form>
