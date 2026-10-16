@@ -76,5 +76,10 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 *.db-wal
 *.db-shm
 
+# Android release signing (never commit these)
+**/keystore.properties
+**/*.keystore
+**/*.jks
+
 # slide export artifacts
 slides/out/

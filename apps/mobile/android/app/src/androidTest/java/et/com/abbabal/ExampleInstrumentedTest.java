@@ -1,4 +1,4 @@
-package abbabal.com.et;
+package et.com.abbabal;
 
 import static org.junit.Assert.*;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("abbabal.com.et", appContext.getPackageName());
+        assertEquals("et.com.abbabal", appContext.getPackageName());
     }
 }

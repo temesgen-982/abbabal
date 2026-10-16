@@ -1,225 +1,152 @@
 # Abbabal — Codebase Status
 
-> Last updated: June 16, 2026
-> Branch: `feat/web-pages`
+> Last updated: October 16, 2026
+> Branch: `main`
 
----
+A `pnpm` monorepo sharing a single Amharic-proverb dataset across an API, a web
+app, and an offline-capable Android app.
 
-## Feature Completion Status
+```
+apps/api       NestJS API over SQLite (Drizzle), serves the dataset + JSON API
+apps/web       SvelteKit marketing / docs / browsing site
+apps/mobile    SvelteKit app wrapped with Capacitor for Android (offline-first)
+packages/shared  Shared API contracts and brand assets
+scripts/       Data pipeline (fetch → dedupe → AI-process) and version tooling
+data/          proverbs.db — the single source of truth for proverbs
+```
 
-### Backend (NestJS API) — `/apps/api/`
+## Data flow
+
+1. `scripts/fetch-proverbs.ts` pulls new proverbs from the source Telegram
+   channel into `data/proverbs.db` (scheduled, commits back to the repo).
+2. `scripts/process-proverbs.ts` fills in translations/meanings with an AI model
+   and publishes them into the same DB (scheduled).
+3. The API serves the DB directly (`GET /proverbs.db`, `GET /download`) and as a
+   JSON API. The web app calls the JSON API; the mobile app bundles the DB and
+   refreshes it from the API.
+
+## API (`apps/api`)
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Health check endpoint | ✅ Done | `GET /` returns "Hello World!" |
-| User registration | ✅ Done | Email + password, bcrypt hashing |
-| User login (local) | ✅ Done | Passport local strategy |
-| JWT access tokens | ✅ Done | 15min expiry, httpOnly cookies |
-| JWT refresh tokens | ✅ Done | 1-week expiry, rotation |
-| User profile | ✅ Done | `GET /auth/profile` |
-| User CRUD (admin) | ✅ Done | Create, list, update users |
-| Proverb CRUD | ✅ Done | Create, read, update, delete |
-| Proverb search | ✅ Done | Text search with pagination |
-| Random proverb | ✅ Done | Single random result |
-| Proverb submission | ✅ Done | User-submitted with pending status |
-| Proverb review workflow | ✅ Done | Admin approve/reject |
-| API key management | ✅ Done | Create, list, revoke |
-| API key authentication | ✅ Done | SHA-256 hashed keys |
-| Rate limiting (per key) | ✅ Done | Custom ThrottlerGuard |
-| Optional auth on reads | ✅ Done | OptionalApiKeyGuard |
-| Swagger documentation | ✅ Done | `/api/docs` |
-| Role-based access | ✅ Done | Admin / User / API Client |
-| Database migrations | ✅ Done | 2 migrations, drizzle-kit |
-| Admin seeding | ✅ Done | Drizzle seed script |
-| Unit tests | ✅ Done | Controllers, services, guards |
-| E2E tests | ✅ Done | Full auth + API key flow |
+| Health endpoint | ✅ | `GET /` |
+| Stats | ✅ | `GET /stats` — proverb/interpretation counts, DB size/updated-at |
+| Full DB download | ✅ | `GET /download` and `GET /proverbs.db` |
+| List proverbs | ✅ | `GET /proverbs?page&limit` |
+| Search | ✅ | `GET /proverbs/search?q&limit` (text + translations) |
+| Proverb IDs | ✅ | `GET /proverbs/ids` (cacheable, used for incremental sync) |
+| Random proverb | ✅ | `GET /proverbs/random` |
+| Proverb detail | ✅ | `GET /proverbs/:id` |
+| Swagger docs | ✅ | `/docs` |
+| Auth / users / API keys | ❌ | Not on `main` (see the archived `features-dump` branch) |
+| Automated tests | ❌ | Jest is configured, but no `*.spec.ts` / e2e specs are present on `main` |
 
-### Web Frontend (SvelteKit) — `/apps/web/`
+Data access is raw SQLite via a thin Drizzle wrapper. `apps/api/src/db/schema.ts`
+holds row types for the two tables: `proverbs` and `interpretations`.
+
+## Web (`apps/web`)
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Landing page (`/`) | ✅ Done | Hero, stats, features, API showcase, CTA, FAQ |
-| About page (`/about`) | ✅ Done | Mission, approach, values |
-| Documentation page (`/documentation`) | 🟡 Stub | Empty file, needs content |
-| Download page (`/download`) | ✅ Done | SQLite DB + mobile app download cards |
-| Public playground (`/playground`) | ✅ Done | API request builder with response preview |
-| Proverbs listing (`/proverbs`) | ✅ Done | Loads random proverb from API |
-| Proverb detail (`/proverbs/[id]`) | ✅ Done | Hero layout, translations, meanings, share/copy/random, metadata, error states, SEO |
-| Auth — Login (`/auth/login`) | ✅ Done | Superforms + Zod validation |
-| Auth — Signup (`/auth/signup`) | ✅ Done | Superforms + Zod validation |
-| Auth hooks | ✅ Done | httpOnly JWT cookie refresh |
-| Dashboard — Layout | ✅ Done | Sidebar navigation |
-| Dashboard — Overview | ✅ Done | Stats and charts |
-| Dashboard — API Keys | ✅ Done | Create/list/revoke with raw key display |
-| Dashboard — Usage | ✅ Done | Usage analytics with charts |
-| Dashboard — Playground | ✅ Done | Interactive API testing |
-| Dashboard — Profile | ❌ Empty | Placeholder, no content |
-| Dashboard — Admin Users | ✅ Done | TanStack data table with CRUD |
-| Dashboard — Admin Proverbs | 🟡 Stub | Basic page, needs data table |
-| Navigation | ✅ Done | Nav component with all links |
-| Footer | ✅ Done | Brand, links, GitHub icon |
-| Hero component | ✅ Done | Reusable, centered layout |
-| shadcn-svelte components | ✅ Done | 23 UI primitives installed |
-| Responsive design | 🟡 Partial | Most pages responsive, some need polish |
-| Dark mode | 🟡 Partial | CSS variables defined, no toggle yet |
+| Landing page | ✅ | Hero, stats, features, API showcase, FAQ |
+| About page | ✅ | Mission + Telegram build-log timeline |
+| Documentation | ✅ | API reference and examples |
+| Download page | ✅ | Database + Android app cards (links to latest APK) |
+| Playground | ✅ | Public API request builder |
+| Proverbs listing | ✅ | `/proverbs` |
+| Proverb detail | ✅ | `/proverbs/[id]` — translations, meanings, share/copy, SEO |
+| i18n (Amharic / English) | ✅ | Locale in the URL path (`/am/…`), wuchale |
+| Dark mode | ✅ | Theme persisted, no flash on load |
+| Error page | ✅ | `+error.svelte` |
+| SEO | ✅ | `robots.txt`, `sitemap.xml`, per-page meta |
+| Auth / dashboard | ❌ | Not on `main` (archived branch has a richer, unmerged version) |
 
-### Mobile App (Capacitor/SvelteKit) — `/apps/mobile/`
+Deployed on Vercel via `@sveltejs/adapter-auto`.
+
+## Mobile (`apps/mobile`, Android)
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Home feed | ✅ Done | Infinite scroll proverb cards |
-| Search | ✅ Done | Debounced search input |
-| Random proverb | ✅ Done | Fetch and display random |
-| Saved proverbs | 🟡 Partial | Page exists, needs persistence |
-| Profile page | 🟡 Partial | Page exists, needs auth integration |
-| Proverb detail | 🟡 Stub | Basic page layout |
-| Bottom navigation | ✅ Done | 5 tabs: Home, Search, Random, Saved, Profile |
-| Side drawer | ✅ Done | App info and links |
-| API client | ✅ Done | Fetch wrapper for all endpoints |
-| Capacitor Android | ✅ Done | Native project configured |
-| Offline support | ❌ Missing | Planned, not implemented |
-| Push notifications | ❌ Missing | Not started |
+| Home feed | ✅ | Infinite-scroll proverb cards |
+| Search | ✅ | Debounced, searches proverb text + translations |
+| Random proverb | ✅ | Fetch and display |
+| Proverb detail | ✅ | Full detail view with share |
+| Saved proverbs | ✅ | Persisted to `localStorage` |
+| Profile page | ✅ | App version, manual sync, data source info |
+| Offline support | ✅ | Bundled SQLite + 24h background sync from the API |
+| Native share sheet | ✅ | `@capacitor/share` |
+| Home-screen widget | ✅ | `ProverbWidget` reads the SQLite DB, shows a random proverb |
+| Icons / splash | ✅ | Generated from `packages/shared/assets` |
+| Single version + release builds | ✅ | Version from root `package.json`; signed APK via GitHub Actions |
+| Authentication | ❌ | No login yet |
+| Push notifications | ❌ | Not started |
 
-### Shared Package — `/packages/shared/`
+`applicationId` / namespace is `et.com.abbabal`.
+
+## Shared (`packages/shared`)
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| TypeScript interfaces | 🟡 Partial | Some contracts defined, many missing |
-| Runtime code | ❌ Missing | `.js` files are empty stubs |
-| Backend integration | 🟡 Partial | Backend has its own DTOs separately |
+| Type contracts | ✅ | `contracts.*`, `index.*` declaration files |
+| Runtime code | ❌ | `.js` files are stubs — consumers rely on the types only |
+| Brand assets | ✅ | Source logos used to generate mobile icons/splash |
 
----
+## Infrastructure & tooling
 
-## Known Issues & Technical Debt
-
-### Backend
-1. **No input validation on interpretation votes** — Vote controller exists in schema but not exposed via API
-2. **ProverbStats not auto-populated** — Views/forwards counters exist in schema but no middleware increments them
-3. **Environment template outdated** — `.env.example` shows `file:./data/proverbs.db` (SQLite-style) but production uses PostgreSQL
-4. **No database connection pooling config** — Uses default node-postgres pool settings
-5. **Swagger decorators on DTOs** — Mix of Swagger + class-validator decorators makes DTOs verbose
-6. **No soft deletes** — Proverbs and users are hard-deleted
-7. **Interpretation source enum** — Contains `telegram` which is a legacy import pipeline not fully documented
-
-### Web Frontend
-1. **Documentation page empty** — `/docs` link in nav points to `/documentation` which is an empty file
-2. **Proverb detail route empty** — `proverbs/[id]/+page.svelte` has no content
-3. **Nav link mismatch** — Nav links to `/docs` but the actual route is `/documentation`
-4. **Dashboard profile page empty** — No content at `dashboard/profile/`
-5. **No 404 page** — No `+error.svelte` at root or custom error page
-6. **No loading states** — No `+loading.svelte` for route transitions
-7. **Dark mode toggle** — CSS variables exist for dark mode but no toggle UI
-8. **API base URL hardcoded in playground** — Falls back to `http://localhost:3000` in some places
-9. **Mobile responsiveness** — Some dashboard pages may not be fully responsive
-10. **No meta tags / SEO** — Missing Open Graph, description, and keyword meta tags
-
-### Mobile App
-1. **No authentication** — Mobile app doesn't support login yet
-2. **Saved proverbs not persisted** — Page renders but no local storage or API integration
-3. **Profile page is a placeholder** — Shows basic layout without real functionality
-4. **No offline caching** — Every request hits the network
-5. **No error handling for network failures** — Missing retry logic or offline indicators
-
-### Infrastructure
-1. **No CI/CD pipeline** — No GitHub Actions, no automated testing on PRs
-2. **No Docker setup** — No containerization for local development or deployment
-3. **No staging environment** — Only local development and production (Render.com)
-4. **No monitoring or logging** — No structured logging, no error tracking (Sentry, etc.)
-5. **No database backup strategy** — No automated backup configuration
-
----
-
-## Current Sprint Focus (feat/web-pages)
-
-### Recently Completed
-- [x] Landing page with hero, stats, features, API showcase, CTA, and FAQ sections
-- [x] Reusable Hero component (centered layout, configurable)
-- [x] Footer component (brand, links, GitHub icon, moved from dashboard)
-- [x] Nav component with all navigation items and "Get Started" CTA
-- [x] About page — stripped down to mission, approach, values
-- [x] Playground page — replaced PlaygroundHero with inline hero matching download page pattern
-- [x] Download page with SQLite and mobile app download cards
-- [x] Proverbs listing page with random proverb load
-- [x] Proverb detail page (`/proverbs/[id]`) — hero layout, translations, meanings, share/copy/random actions, metadata, error states, SEO meta tags
-
-### In Progress
-- [ ] Dark mode toggle
-- [ ] Documentation page content
-- [ ] Nav link fix (`/docs` → `/documentation`)
-
-### Up Next
-- [ ] Dashboard profile page
-- [ ] 404 error page
-- [ ] Loading states
-- [ ] Proverbs search integration
-
----
-
-## Database Schema
-
-### Tables
-
-| Table | Rows (est.) | Purpose |
-|-------|-------------|---------|
-| `proverbs` | 3,200+ | Core proverb records with text, source, status |
-| `interpretations` | 6,400+ | Translations and meanings (2+ per proverb) |
-| `proverb_stats` | 3,200+ | View and forward counters |
-| `users` | ~50 | Registered users (admin, user, api_client roles) |
-| `api_keys` | ~100 | Hashed API keys linked to users |
-| `votes` | ~200 | User votes on interpretations (+1/-1) |
-
-### Key Relationships
-- Proverb 1:N Interpretation (proverbs store text, interpretations store translations/meanings)
-- Proverb 1:1 ProverbStats (views and forwards)
-- User 1:N ApiKey
-- User 1:N Vote
-- Interpretation 1:N Vote
-
----
-
-## Frontend Route Map
-
-### Web App Routes
-
-```
-/                          → Landing page
-/about                     → About page
-/auth/login                → Login
-/auth/signup               → Registration
-/dashboard                 → Dashboard layout (sidebar)
-/dashboard/overview        → Dashboard home
-/dashboard/api-keys        → API key management
-/dashboard/usage           → Usage analytics
-/dashboard/playground      → API playground (dashboard)
-/dashboard/profile         → Profile (empty)
-/dashboard/admin/users     → User management (admin)
-/dashboard/admin/proverbs  → Proverb management (admin)
-/documentation             → API docs (empty)
-/download                  → Download page
-/playground                → Public API playground
-/proverbs                  → Proverb listing
-/proverbs/[id]             → Proverb detail (empty)
-```
-
-### Mobile App Routes
-
-```
-/                          → Proverb feed (infinite scroll)
-/search                    → Search proverbs
-/random                    → Random proverb
-/saved                     → Saved bookmarks
-/profile                   → User profile
-/proverb-detail            → Proverb detail view
-```
-
----
+| Area | Status | Notes |
+|------|--------|-------|
+| Data workflows | ✅ | `fetch-proverbs`, `process-proverbs` (scheduled) |
+| Android release | ✅ | `release-android` builds a signed APK and publishes a GitHub Release on `v*` tags |
+| Versioning | ✅ | `pnpm version:set x.y.z` updates root + all packages |
+| Changelog | ✅ | `CHANGELOG.md` |
+| Docker / staging / monitoring | ❌ | Not set up |
 
 ## Deployment
 
-| App | Adapter | Platform |
-|-----|---------|----------|
-| API | NestJS built-in | Render.com (https://abbabal-api.onrender.com) |
-| Web | @sveltejs/adapter-auto | TBD |
-| Mobile | @sveltejs/adapter-static | Google Play Store |
+| App | Adapter / runtime | Platform |
+|-----|-------------------|----------|
+| API | NestJS | Render.com — https://abbabal-api.onrender.com |
+| Web | `@sveltejs/adapter-auto` | Vercel |
+| Mobile | `@sveltejs/adapter-static` | GitHub Releases (APK) now; Google Play planned |
 
-No CI/CD pipeline is configured. Deployment is currently manual.
+## Known issues & technical debt
+
+1. **No automated tests on `main`.** Jest/e2e config exists but no specs.
+2. **Auth/dashboard lives only on an archived branch.** The richer web
+   dashboard + auth surface is on `archive/features-dump`, not merged.
+3. **Mobile has no auth or push notifications.**
+4. **`applicationId` is now `et.com.abbabal`.** It was `abbabal.com.et`; any
+   device that installed a pre-change build will treat this as a new app.
+5. **No staging environment, containerization, or error monitoring.**
+6. **Mobile API base URL is effectively hardcoded.**
+   `apps/mobile/src/lib/api.ts` reads `process.env.PUBLIC_API_BASE_URL`, but no
+   env file or type declaration exists, so it always falls back to
+   `https://abbabal-api.onrender.com`. Wire it through SvelteKit's `$env` if it
+   needs to be configurable per environment.
+
+## Route maps
+
+### Web
+
+```
+/                 Landing
+/about            About
+/documentation    API docs
+/download         Dataset + Android app
+/playground       Public API playground
+/proverbs         Proverb listing
+/proverbs/[id]    Proverb detail
+/robots.txt        SEO
+/sitemap.xml       SEO
+```
+
+### Mobile
+
+```
+/                 Proverb feed (infinite scroll)
+/search           Search
+/random           Random proverb
+/saved            Saved proverbs
+/profile          Profile & sync
+/proverb-detail   Proverb detail (?id=)
+```

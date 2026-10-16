@@ -1,4 +1,4 @@
-package abbabal.com.et;
+package et.com.abbabal;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -21,7 +21,7 @@ public class ProverbWidget extends AppWidgetProvider {
     private static final String PREF_TEXT = "proverb_text";
     private static final String PREF_TRANSLATION = "proverb_translation";
     private static final String PREF_LAST_ID = "proverb_last_id";
-    private static final String ACTION_REFRESH = "abbabal.com.et.WIDGET_REFRESH";
+    private static final String ACTION_REFRESH = "et.com.abbabal.WIDGET_REFRESH";
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 

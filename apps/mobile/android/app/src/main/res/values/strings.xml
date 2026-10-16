@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Abbabal</string>
     <string name="title_activity_main">Abbabal</string>
-    <string name="package_name">abbabal.com.et</string>
-    <string name="custom_url_scheme">abbabal.com.et</string>
+    <string name="package_name">et.com.abbabal</string>
+    <string name="custom_url_scheme">et.com.abbabal</string>
     <string name="widget_description">አዲስ የአማርኛ ምሳሌ ያሳያል</string>
 </resources>

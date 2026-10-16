@@ -1,9 +1,8 @@
 import { localDb } from './db';
 
-export const BASE_URL =
-  (process.env.EXPO_PUBLIC_API_BASE_URL ??
-    process.env.PUBLIC_API_BASE_URL ??
-    'https://abbabal-api.onrender.com').replace(/\/+$/, '');
+export const BASE_URL = (
+	process.env.PUBLIC_API_BASE_URL ?? 'https://abbabal-api.onrender.com'
+).replace(/\/+$/, '');
 
 export type Interpretation = {
   id: number;

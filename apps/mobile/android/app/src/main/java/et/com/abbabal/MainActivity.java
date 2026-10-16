@@ -1,4 +1,4 @@
-package abbabal.com.et;
+package et.com.abbabal;
 
 import com.getcapacitor.BridgeActivity;
 

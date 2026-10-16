@@ -114,5 +114,57 @@ To bump the product version everywhere at once:
 pnpm version:set 0.2.0
 ```
 
+This updates the root `package.json` (the source of truth) **and** every
+workspace package, then you update `CHANGELOG.md` and commit. Only strict
+`x.y.z` versions are accepted, because the Android `versionCode` is derived
+from it.
+
 The version is also displayed as the Android app version. When shipping a new
 Android build to the Play Store, the version must always increase.
+
+## Releasing the Android app
+
+Releases are built and published by
+[`.github/workflows/release-android.yml`](.github/workflows/release-android.yml).
+Pushing a `v*` tag builds a signed APK and attaches it to a GitHub Release as
+`abbabal.apk`; the website download page links to
+`/releases/latest/download/abbabal.apk`, so it always points at the newest
+build. Manual runs (Actions → *Release Android APK* → Run workflow) build the
+APK and upload it as a workflow artifact without creating a release.
+
+### One-time keystore setup
+
+Generate the release keystore (keep it safe — losing it means you can never
+update the app on the Play Store):
+
+```bash
+keytool -genkeypair -v -keystore abbabal-release.keystore \
+  -alias abbabal -keyalg RSA -keysize 2048 -validity 10000
+```
+
+Then add these repository secrets (Settings → Secrets and variables → Actions):
+
+| Secret | Value |
+| ------ | ----- |
+| `ANDROID_KEYSTORE_BASE64` | `base64 -w0 abbabal-release.keystore` |
+| `ANDROID_KEYSTORE_PASSWORD` | the keystore password |
+| `ANDROID_KEY_ALIAS` | `abbabal` |
+| `ANDROID_KEY_PASSWORD` | the key password |
+
+### Releasing
+
+```bash
+pnpm version:set 0.2.0      # bump everywhere
+# update CHANGELOG.md, then:
+git commit -am "chore: release v0.2.0"
+git tag v0.2.0
+git push origin main --tags
+```
+
+### Local signing
+
+To build a signed release on your machine, copy
+`apps/mobile/android/keystore.properties.example` to `keystore.properties`
+(git-ignored) and fill it in, then run
+`pnpm --filter @abbabal/mobile android:run`. Without those credentials the
+release build is unsigned and cannot be installed.

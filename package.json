@@ -14,6 +14,6 @@
     "check": "pnpm -r --if-present check",
     "test": "pnpm --filter @abbabal/api test",
     "test:e2e": "pnpm --filter @abbabal/api test:e2e",
-    "version:set": "pnpm -r version"
+    "version:set": "node scripts/version.mjs"
   }
 }
