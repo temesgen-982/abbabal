@@ -344,40 +344,6 @@
     <DataSource />
   </section>
 
-  <!-- Developer Band -->
-  <section class="mb-16 overflow-hidden rounded-2xl bg-[#1a1d16] p-8 text-[#e8e6dc] md:p-10">
-    <div class="grid items-center gap-10 md:grid-cols-2">
-      <div>
-        <p class="text-xs font-bold uppercase tracking-[0.08em] text-[#a3b87a]">For Developers</p>
-        <h2 class="mt-3 text-2xl font-extrabold tracking-tight">One command to start exploring.</h2>
-        <p class="mt-3 max-w-md text-sm leading-relaxed text-[#9a9f8e]">
-          The full corpus is one REST call away — no API key, no signup. Browse the live playground or read the documentation to build with it.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href="/playground" class="inline-flex items-center gap-2 rounded-lg bg-[#a3b87a] px-5 py-2.5 text-xs font-semibold text-[#1a1d16] transition-colors hover:bg-[#b5c98c]">
-            <Code2 size={15} /> Open the Playground <ArrowRight size={14} />
-          </a>
-          <a href="/documentation" class="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-2.5 text-xs font-semibold text-[#e8e6dc] transition-colors hover:bg-white/5">
-            Read the docs
-          </a>
-        </div>
-      </div>
-      <div class="rounded-xl border border-white/10 bg-black/30 p-5 font-mono text-xs leading-relaxed">
-        <div class="mb-3 flex gap-1.5">
-          <span class="h-2.5 w-2.5 rounded-full bg-[#f45b69]"></span>
-          <span class="h-2.5 w-2.5 rounded-full bg-[#f5c542]"></span>
-          <span class="h-2.5 w-2.5 rounded-full bg-[#59c353]"></span>
-        </div>
-        <p><span class="text-[#a3b87a]">$</span> curl https://abbabal-api.onrender.com/proverbs/random</p>
-        <p class="mt-3 text-[#9a9f8e]">{'{'}</p>
-        <p class="pl-4 text-[#9a9f8e]">&quot;text&quot;: <span class="text-[#e8e6dc]">&quot;መራጭ ይወድቃል ከምራጭ&quot;</span>,</p>
-        <p class="pl-4 text-[#9a9f8e]">&quot;date&quot;: <span class="text-[#e8e6dc]">&quot;2026-03-25&quot;</span>,</p>
-        <p class="pl-4 text-[#9a9f8e]">&quot;interpretations&quot;: [<span class="text-[#e8e6dc]">…</span>]</p>
-        <p class="text-[#9a9f8e]">{'\}'}</p>
-      </div>
-    </div>
-  </section>
-
   <!-- Get the App -->
   <section class="mb-16 overflow-hidden rounded-3xl border border-border bg-secondary">
     <div class="grid gap-10 p-8 md:grid-cols-[1.1fr_1fr] md:items-center md:p-12">
@@ -428,6 +394,40 @@
       </div>
       <div class="flex justify-center md:justify-end">
         <PhoneMockup />
+      </div>
+    </div>
+  </section>
+
+  <!-- Developer Band -->
+  <section class="mb-16 overflow-hidden rounded-2xl bg-[#1a1d16] p-8 text-[#e8e6dc] md:p-10">
+    <div class="grid items-center gap-10 md:grid-cols-2">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.08em] text-[#a3b87a]">For Developers</p>
+        <h2 class="mt-3 text-2xl font-extrabold tracking-tight">One command to start exploring.</h2>
+        <p class="mt-3 max-w-md text-sm leading-relaxed text-[#9a9f8e]">
+          The full corpus is one REST call away — no API key, no signup. Browse the live playground or read the documentation to build with it.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/playground" class="inline-flex items-center gap-2 rounded-lg bg-[#a3b87a] px-5 py-2.5 text-xs font-semibold text-[#1a1d16] transition-colors hover:bg-[#b5c98c]">
+            <Code2 size={15} /> Open the Playground <ArrowRight size={14} />
+          </a>
+          <a href="/documentation" class="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-2.5 text-xs font-semibold text-[#e8e6dc] transition-colors hover:bg-white/5">
+            Read the docs
+          </a>
+        </div>
+      </div>
+      <div class="rounded-xl border border-white/10 bg-black/30 p-5 font-mono text-xs leading-relaxed">
+        <div class="mb-3 flex gap-1.5">
+          <span class="h-2.5 w-2.5 rounded-full bg-[#f45b69]"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-[#f5c542]"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-[#59c353]"></span>
+        </div>
+        <p><span class="text-[#a3b87a]">$</span> curl https://abbabal-api.onrender.com/proverbs/random</p>
+        <p class="mt-3 text-[#9a9f8e]">{'{'}</p>
+        <p class="pl-4 text-[#9a9f8e]">&quot;text&quot;: <span class="text-[#e8e6dc]">&quot;መራጭ ይወድቃል ከምራጭ&quot;</span>,</p>
+        <p class="pl-4 text-[#9a9f8e]">&quot;date&quot;: <span class="text-[#e8e6dc]">&quot;2026-03-25&quot;</span>,</p>
+        <p class="pl-4 text-[#9a9f8e]">&quot;interpretations&quot;: [<span class="text-[#e8e6dc]">…</span>]</p>
+        <p class="text-[#9a9f8e]">{'\}'}</p>
       </div>
     </div>
   </section>
