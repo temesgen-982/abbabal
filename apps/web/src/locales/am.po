@@ -39,9 +39,8 @@ msgstr "ምሳሌዎች እና ትርጓሜዎች"
 msgid "Mission"
 msgstr "ተልእኮ"
 
-#: src/routes/+page.svelte
-msgid "One"
-msgstr "አንድ"
+#~ msgid "One"
+#~ msgstr "አንድ"
 
 #: src/routes/+page.svelte
 msgid "Preserve wisdom. Share culture."
@@ -1864,3 +1863,11 @@ msgstr ""
 #: src/routes/proverbs/+page.svelte
 msgid "Search Amharic or English..."
 msgstr "በአማርኛ ወይም በእንግሊዝኛ ፈልግ..."
+
+#: src/routes/+page.svelte
+msgid "One Platform"
+msgstr ""
+
+#: src/routes/proverbs/+page.svelte
+msgid "Coming soon"
+msgstr "በቅርቡ ይመጣል"

@@ -39,9 +39,8 @@ msgstr "Proverbs & Interpretations"
 msgid "Mission"
 msgstr "Mission"
 
-#: src/routes/+page.svelte
-msgid "One"
-msgstr "One"
+#~ msgid "One"
+#~ msgstr "One"
 
 #: src/routes/+page.svelte
 msgid "Preserve wisdom. Share culture."
@@ -1864,3 +1863,11 @@ msgstr "Sideload the APK after allowing installs from unknown sources. A Play St
 #: src/routes/proverbs/+page.svelte
 msgid "Search Amharic or English..."
 msgstr "Search Amharic or English..."
+
+#: src/routes/+page.svelte
+msgid "One Platform"
+msgstr "One Platform"
+
+#: src/routes/proverbs/+page.svelte
+msgid "Coming soon"
+msgstr "Coming soon"

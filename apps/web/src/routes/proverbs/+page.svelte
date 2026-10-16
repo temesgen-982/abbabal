@@ -3,6 +3,7 @@
   import { resolve } from '$app/paths';
   import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, List, Grid, Bookmark, Volume2, Shuffle } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
+  import * as Tooltip from '$lib/components/ui/tooltip';
   import Seo from '$lib/seo/Seo.svelte';
   import { getSiteUrl } from '$lib/seo/site.js';
   import { localize } from '$lib/i18n.js';
@@ -244,9 +245,16 @@
                   <button onclick={(e) => { e.preventDefault(); }} class="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary" aria-label="Bookmark">
                     <Bookmark size={14} />
                   </button>
-                  <button onclick={(e) => { e.preventDefault(); }} class="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary" aria-label="Listen">
-                    <Volume2 size={14} />
-                  </button>
+                  <Tooltip.Root>
+                    <Tooltip.Trigger
+                      onclick={(e) => { e.preventDefault(); }}
+                      class="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary"
+                      aria-label="Listen"
+                    >
+                      <Volume2 size={14} />
+                    </Tooltip.Trigger>
+                    <Tooltip.Content side="top">Coming soon</Tooltip.Content>
+                  </Tooltip.Root>
                 </div>
               </div>
             </a>
