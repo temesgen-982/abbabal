@@ -5,10 +5,12 @@
   import { goto } from "$app/navigation";
   import Seo from "$lib/seo/Seo.svelte";
   import { getSiteUrl } from "$lib/seo/site.js";
+  import { localize } from "$lib/i18n.js";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
 
+  const locale = $derived(data.locale);
   const p = $derived(data.proverb);
   const baseUrl = $derived(data.baseUrl);
 
@@ -73,7 +75,9 @@
   let copied = $state(false);
   let shared = $state(false);
 
-  const proverbUrl = $derived(p ? `${getSiteUrl()}/proverbs/${p.id}` : getSiteUrl());
+  const proverbUrl = $derived(
+    p ? `${getSiteUrl()}${localize(`/proverbs/${p.id}`, locale)}` : getSiteUrl()
+  );
 
   const seoTitle = $derived(p ? `${amharicText} — Amharic Proverb | Abbabal` : "Proverb | Abbabal");
 
@@ -102,8 +106,8 @@
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: `${getSiteUrl()}/` },
-                { "@type": "ListItem", position: 2, name: "Proverbs", item: `${getSiteUrl()}/proverbs` },
+                { "@type": "ListItem", position: 1, name: "Home", item: `${getSiteUrl()}${localize('/', locale)}` },
+                { "@type": "ListItem", position: 2, name: "Proverbs", item: `${getSiteUrl()}${localize('/proverbs', locale)}` },
                 { "@type": "ListItem", position: 3, name: amharicText, item: proverbUrl },
               ],
             },
@@ -144,7 +148,7 @@
       });
       if (res.ok) {
         const random = await res.json();
-        goto(`/proverbs/${random.id}`);
+        goto(localize(`/proverbs/${random.id}`, locale));
       }
     } catch {
       // silently fail

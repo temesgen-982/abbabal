@@ -1306,9 +1306,8 @@ msgstr "የጎን አሞሌ"
 msgid "Displays the mobile sidebar."
 msgstr "የሞባይል ጎን አሞሌን ያሳያል።"
 
-#: src/lib/components/Nav.svelte
-msgid "Switch language"
-msgstr "ቋንቋ ቀይር"
+#~ msgid "Switch language"
+#~ msgstr "ቋንቋ ቀይር"
 
 #: src/routes/+page.svelte
 msgid "መራጭ ይወድቃል ከምራጭ"
@@ -1659,4 +1658,156 @@ msgstr ""
 
 #: src/routes/playground/+page.svelte
 msgid "Test the Abbabal REST API interactively: try list, search, random, and lookup endpoints for Amharic proverbs with translations."
+msgstr ""
+
+#~ msgid "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered across everywhere could live in one open place — for everyone to read, learn, and build with?"
+#~ msgstr ""
+
+#~ msgid "We gathered the proverbs, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
+#~ msgstr ""
+
+#~ msgid "Built by"
+#~ msgstr ""
+
+#~ msgid "Personal site <0/>"
+#~ msgstr ""
+
+#~ msgid "Jan"
+#~ msgstr ""
+
+#~ msgid "Feb"
+#~ msgstr ""
+
+#~ msgid "Mar"
+#~ msgstr ""
+
+#~ msgid "Apr"
+#~ msgstr ""
+
+#~ msgid "May"
+#~ msgstr ""
+
+#~ msgid "Jun"
+#~ msgstr ""
+
+#~ msgid "Jul"
+#~ msgstr ""
+
+#~ msgid "Aug"
+#~ msgstr ""
+
+#~ msgid "Sep"
+#~ msgstr ""
+
+#~ msgid "Oct"
+#~ msgstr ""
+
+#~ msgid "Nov"
+#~ msgstr ""
+
+#~ msgid "Dec"
+#~ msgstr ""
+
+#~ msgid "code and whatnot"
+#~ msgstr ""
+
+#~ msgid "@codenshii"
+#~ msgstr ""
+
+#~ msgid "Forwarded from {0}"
+#~ msgstr "ከ {0} ተላልፏል"
+
+#~ msgid "<0/> UTC"
+#~ msgstr ""
+
+#~ msgid "View on Telegram <0/>"
+#~ msgstr "በቴሌግራም ይመልከቱ <0/>"
+
+#~ msgid "The Full Story"
+#~ msgstr ""
+
+#~ msgid "How Abbabal was <0>actually</0> built"
+#~ msgstr ""
+
+#~ msgid "Every milestone, dead end, and facepalm — posted as it happened on my Telegram channel. From scraping the first 7,000 proverbs to shipping the mobile app, in my own words."
+#~ msgstr ""
+
+#~ msgid "<0/> Follow @codenshii <1/>"
+#~ msgstr ""
+
+#: src/lib/components/Nav.svelte
+msgid "Switch to Amharic"
+msgstr "ወደ አማርኛ ተቀይር"
+
+#: src/lib/components/Nav.svelte
+msgid "Switch to English"
+msgstr "ወደ እንግሊዝኛ ተቀይር"
+
+#: src/lib/components/Nav.svelte
+#: src/lib/components/Nav.svelte
+#, url:main
+msgid "/"
+msgstr "/"
+
+#. /proverbs
+#. /proverbs
+#. /proverbs/{0}; 0: potd.id
+#. /proverbs
+#. /proverbs/{0}; 0: p.id
+#. /proverbs
+#. /proverbs/{0}; 0: ex.id
+#. /proverbs
+#. /proverbs?limit=2
+#. /proverbs
+#. /proverbs
+#. /proverbs/{0}; 0: proverb.id
+#. /proverbs/{0}; 0: proverb.id
+#. /proverbs/{0}; 0: proverb.id
+#. /proverbs
+#: src/lib/components/Nav.svelte
+#: src/routes/+error.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/about/+page.svelte
+#: src/routes/documentation/+page.svelte
+#: src/routes/download/+page.svelte
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/[id]/+page.svelte
+#, url:main
+msgid "/proverbs/**"
+msgstr ""
+
+#: src/lib/components/Footer.svelte
+#: src/lib/components/Nav.svelte
+#: src/routes/download/+page.svelte
+#, url:main
+msgid "/about"
+msgstr ""
+
+#: src/lib/components/Footer.svelte
+#: src/lib/components/Nav.svelte
+#: src/routes/+page.svelte
+#: src/routes/about/+page.svelte
+#: src/routes/download/+page.svelte
+#, url:main
+msgid "/download"
+msgstr ""
+
+#: src/lib/components/Footer.svelte
+#: src/lib/components/Nav.svelte
+#: src/routes/+page.svelte
+#: src/routes/about/+page.svelte
+#, url:main
+msgid "/documentation"
+msgstr ""
+
+#: src/routes/+page.svelte
+#, url:main
+msgid "/playground"
 msgstr ""

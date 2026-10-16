@@ -8,6 +8,23 @@ export default defineConfig({
   adapters: {
     main: svelte({
       loader: 'sveltekit',
+      url: {
+        // Patterns are matched in this order (no specificity sorting), so the
+        // broadest one is last. Paths that don't match stay locale-free.
+        patterns: [
+          '/',
+          '/proverbs/**',
+          '/about',
+          '/download',
+          '/documentation',
+          '/playground',
+        ],
+        // Not `true`: the built-in `localizeDefault` prefixes *every* locale
+        // (`/en/about`). We keep the source locale unprefixed and only prefix
+        // the others, so English URLs — the ones already shared and indexed —
+        // don't move. `deLocalizeDefault` (used by `reroute`) is the inverse.
+        localize: 'src/lib/url.js',
+      },
     }),
     js: js({
       loader: 'vite',

@@ -5,6 +5,7 @@
   import { Button } from '$lib/components/ui/button';
   import Seo from '$lib/seo/Seo.svelte';
   import { getSiteUrl } from '$lib/seo/site.js';
+  import { localize } from '$lib/i18n.js';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
@@ -15,6 +16,12 @@
 
   const totalPages = $derived(Math.max(1, Math.ceil(data.total / data.limit)));
   const isSearch = $derived(Boolean(data.searchQuery));
+
+  // wuchale localizes URL *literals* at build time, but nothing it can see:
+  // values built at runtime (query strings, `goto` arguments, form actions)
+  // have to be localized here. `localize` is idempotent, so it's safe even
+  // where the extractor did catch the literal.
+  const locale = $derived(data.locale);
 
   function pageHref(p: number): '/proverbs' | `/proverbs?page=${number}` {
     const clamped = Math.min(Math.max(p, 1), totalPages);
@@ -42,7 +49,7 @@
     '@type': 'CollectionPage',
     name: 'Amharic Proverbs',
     alternateName: 'የአማርኛ አባባሎች',
-    url: `${getSiteUrl()}/proverbs`,
+    url: `${getSiteUrl()}${localize('/proverbs', locale)}`,
     description: seoDescription,
     inLanguage: ['en', 'am'],
     mainEntity: {
@@ -51,7 +58,7 @@
       itemListElement: data.proverbs.map((proverb: { id: number; text: string }, i: number) => ({
         '@type': 'ListItem',
         position: (data.page - 1) * data.limit + i + 1,
-        url: `${getSiteUrl()}/proverbs/${proverb.id}`,
+        url: `${getSiteUrl()}${localize(`/proverbs/${proverb.id}`, locale)}`,
         name: proverb.text
       }))
     }
@@ -59,11 +66,11 @@
 
   function goToRandom() {
     const id = Math.floor(Math.random() * (data.proverbCount ?? 7576)) + 1;
-    goto(`/proverbs/${id}`);
+    goto(localize(`/proverbs/${id}`, locale));
   }
 
   function clearFilters() {
-    goto('/proverbs');
+    goto(localize('/proverbs', locale));
   }
 
   const pageNumbers = $derived.by(() => {
@@ -111,7 +118,7 @@
 
   <!-- Search + Controls Row -->
   <div class="mb-6 grid items-center gap-4 md:grid-cols-[1fr_auto]">
-    <form action="/proverbs" method="get" class="relative">
+    <form action={localize('/proverbs', locale)} method="get" class="relative">
       <Search size={16} class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
       <input
         type="text"
@@ -267,7 +274,7 @@
       {#if data.total > data.limit}
         <nav class="mt-8 flex items-center justify-center gap-2" aria-label="Proverb pages">
           <a
-            href={resolve(pageHref(data.page - 1))}
+            href={localize(resolve(pageHref(data.page - 1)), locale)}
             aria-disabled={data.page <= 1}
             class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary {data.page <= 1 ? 'pointer-events-none opacity-40' : ''}"
           >
@@ -280,7 +287,7 @@
               <span class="px-1 text-xs text-muted-foreground">...</span>
             {:else}
               <a
-                href={resolve(pageHref(p))}
+                href={localize(resolve(pageHref(p)), locale)}
                 aria-current={p === data.page ? 'page' : undefined}
                 class="flex h-9 w-9 items-center justify-center rounded-lg text-xs font-semibold transition-colors {p === data.page ? 'bg-primary text-primary-foreground' : 'border border-border bg-card hover:border-primary hover:text-primary'}"
               >
@@ -290,7 +297,7 @@
           {/each}
 
           <a
-            href={resolve(pageHref(data.page + 1))}
+            href={localize(resolve(pageHref(data.page + 1)), locale)}
             aria-disabled={data.page >= totalPages}
             class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary {data.page >= totalPages ? 'pointer-events-none opacity-40' : ''}"
           >

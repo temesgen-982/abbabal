@@ -1306,9 +1306,8 @@ msgstr "Sidebar"
 msgid "Displays the mobile sidebar."
 msgstr "Displays the mobile sidebar."
 
-#: src/lib/components/Nav.svelte
-msgid "Switch language"
-msgstr "Switch language"
+#~ msgid "Switch language"
+#~ msgstr "Switch language"
 
 #: src/routes/+page.svelte
 msgid "መራጭ ይወድቃል ከምራጭ"
@@ -1660,3 +1659,155 @@ msgstr "API Playground — Try the Abbabal Proverbs API"
 #: src/routes/playground/+page.svelte
 msgid "Test the Abbabal REST API interactively: try list, search, random, and lookup endpoints for Amharic proverbs with translations."
 msgstr "Test the Abbabal REST API interactively: try list, search, random, and lookup endpoints for Amharic proverbs with translations."
+
+#~ msgid "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered across everywhere could live in one open place — for everyone to read, learn, and build with?"
+#~ msgstr "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered across everywhere could live in one open place — for everyone to read, learn, and build with?"
+
+#~ msgid "We gathered the proverbs, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
+#~ msgstr "We gathered the proverbs, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
+
+#~ msgid "Built by"
+#~ msgstr "Built by"
+
+#~ msgid "Personal site <0/>"
+#~ msgstr "Personal site <0/>"
+
+#~ msgid "Jan"
+#~ msgstr "Jan"
+
+#~ msgid "Feb"
+#~ msgstr "Feb"
+
+#~ msgid "Mar"
+#~ msgstr "Mar"
+
+#~ msgid "Apr"
+#~ msgstr "Apr"
+
+#~ msgid "May"
+#~ msgstr "May"
+
+#~ msgid "Jun"
+#~ msgstr "Jun"
+
+#~ msgid "Jul"
+#~ msgstr "Jul"
+
+#~ msgid "Aug"
+#~ msgstr "Aug"
+
+#~ msgid "Sep"
+#~ msgstr "Sep"
+
+#~ msgid "Oct"
+#~ msgstr "Oct"
+
+#~ msgid "Nov"
+#~ msgstr "Nov"
+
+#~ msgid "Dec"
+#~ msgstr "Dec"
+
+#~ msgid "code and whatnot"
+#~ msgstr "code and whatnot"
+
+#~ msgid "@codenshii"
+#~ msgstr "@codenshii"
+
+#~ msgid "Forwarded from {0}"
+#~ msgstr "Forwarded from {0}"
+
+#~ msgid "<0/> UTC"
+#~ msgstr "<0/> UTC"
+
+#~ msgid "View on Telegram <0/>"
+#~ msgstr "View on Telegram <0/>"
+
+#~ msgid "The Full Story"
+#~ msgstr "The Full Story"
+
+#~ msgid "How Abbabal was <0>actually</0> built"
+#~ msgstr "How Abbabal was <0>actually</0> built"
+
+#~ msgid "Every milestone, dead end, and facepalm — posted as it happened on my Telegram channel. From scraping the first 7,000 proverbs to shipping the mobile app, in my own words."
+#~ msgstr "Every milestone, dead end, and facepalm — posted as it happened on my Telegram channel. From scraping the first 7,000 proverbs to shipping the mobile app, in my own words."
+
+#~ msgid "<0/> Follow @codenshii <1/>"
+#~ msgstr "<0/> Follow @codenshii <1/>"
+
+#: src/lib/components/Nav.svelte
+msgid "Switch to Amharic"
+msgstr "Switch to Amharic"
+
+#: src/lib/components/Nav.svelte
+msgid "Switch to English"
+msgstr "Switch to English"
+
+#: src/lib/components/Nav.svelte
+#: src/lib/components/Nav.svelte
+#, url:main
+msgid "/"
+msgstr "/"
+
+#. /proverbs
+#. /proverbs
+#. /proverbs/{0}; 0: potd.id
+#. /proverbs
+#. /proverbs/{0}; 0: p.id
+#. /proverbs
+#. /proverbs/{0}; 0: ex.id
+#. /proverbs
+#. /proverbs?limit=2
+#. /proverbs
+#. /proverbs
+#. /proverbs/{0}; 0: proverb.id
+#. /proverbs/{0}; 0: proverb.id
+#. /proverbs/{0}; 0: proverb.id
+#. /proverbs
+#: src/lib/components/Nav.svelte
+#: src/routes/+error.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/about/+page.svelte
+#: src/routes/documentation/+page.svelte
+#: src/routes/download/+page.svelte
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/+page.svelte
+#: src/routes/proverbs/[id]/+page.svelte
+#, url:main
+msgid "/proverbs/**"
+msgstr "/proverbs/**"
+
+#: src/lib/components/Footer.svelte
+#: src/lib/components/Nav.svelte
+#: src/routes/download/+page.svelte
+#, url:main
+msgid "/about"
+msgstr "/about"
+
+#: src/lib/components/Footer.svelte
+#: src/lib/components/Nav.svelte
+#: src/routes/+page.svelte
+#: src/routes/about/+page.svelte
+#: src/routes/download/+page.svelte
+#, url:main
+msgid "/download"
+msgstr "/download"
+
+#: src/lib/components/Footer.svelte
+#: src/lib/components/Nav.svelte
+#: src/routes/+page.svelte
+#: src/routes/about/+page.svelte
+#, url:main
+msgid "/documentation"
+msgstr "/documentation"
+
+#: src/routes/+page.svelte
+#, url:main
+msgid "/playground"
+msgstr "/playground"

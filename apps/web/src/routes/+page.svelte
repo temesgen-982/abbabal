@@ -16,6 +16,7 @@
   import DataSource from '$lib/components/DataSource.svelte';
   import Seo from '$lib/seo/Seo.svelte';
   import { getSiteUrl } from '$lib/seo/site.js';
+  import { localize } from '$lib/i18n.js';
 
   let { data }: { data: PageData } = $props();
 
@@ -37,7 +38,9 @@
   async function copyPotdLink() {
     if (!potd) return;
     try {
-      await navigator.clipboard.writeText(`${location.origin}/proverbs/${potd.id}`);
+      await navigator.clipboard.writeText(
+        `${location.origin}${localize(`/proverbs/${potd.id}`, data.locale)}`
+      );
       copied = true;
       setTimeout(() => (copied = false), 2000);
     } catch {
@@ -80,7 +83,7 @@
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${getSiteUrl()}/proverbs?search={search_term_string}`
+        urlTemplate: `${getSiteUrl()}${localize('/proverbs', data.locale)}?search={search_term_string}`
       },
       'query-input': 'required name=search_term_string'
     }
@@ -108,7 +111,7 @@
       <p class="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
         Abbabal is a collection of {data.proverbCount ? Number(data.proverbCount).toLocaleString() : '3,000'}+ Amharic proverbs — preserving our heritage, sharing our wisdom.
       </p>
-      <form action="/proverbs" method="get" class="mt-8 flex max-w-md items-center rounded-xl border border-border bg-card pl-5 pr-1.5 py-1.5 shadow-sm">
+      <form action={localize('/proverbs', data.locale)} method="get" class="mt-8 flex max-w-md items-center rounded-xl border border-border bg-card pl-5 pr-1.5 py-1.5 shadow-sm">
         <Search size={16} class="mr-3 shrink-0 text-muted-foreground" />
         <input
           type="text"
@@ -244,7 +247,7 @@
           </p>
           <p class="mt-2 text-sm font-medium">Until the bud is pierced, it does not grow.</p>
         {/if}
-        <a href={potd ? `/proverbs/${potd.id}` : '/proverbs'} class="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
+        <a href={localize(potd ? `/proverbs/${potd.id}` : '/proverbs', data.locale)} class="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
           View Explanation
           <ArrowRight size={14} />
         </a>
