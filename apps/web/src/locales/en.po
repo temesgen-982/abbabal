@@ -16,12 +16,10 @@ msgid "Proverbs"
 msgstr "Proverbs"
 
 #: src/routes/+page.svelte
-#: src/routes/about/+page.svelte
 msgid "License"
 msgstr "License"
 
 #: src/routes/+page.svelte
-#: src/routes/about/+page.svelte
 msgid "Open"
 msgstr "Open"
 
@@ -42,7 +40,6 @@ msgid "Mission"
 msgstr "Mission"
 
 #: src/routes/+page.svelte
-#: src/routes/about/+page.svelte
 msgid "One"
 msgstr "One"
 
@@ -112,7 +109,6 @@ msgid "Understand the deeper wisdom behind each."
 msgstr "Understand the deeper wisdom behind each."
 
 #: src/routes/+page.svelte
-#: src/routes/about/+page.svelte
 msgid "Developer Friendly"
 msgstr "Developer Friendly"
 
@@ -189,72 +185,57 @@ msgstr "Preserving <0>wisdom</0>.<1/> Sharing <2>culture</2>."
 msgid "Abbabal is a digital home for Amharic proverbs and the wisdom they carry. We collect, verify, and organize proverbs and their interpretations, then make them open and accessible for everyone — today and for generations to come."
 msgstr "Abbabal is a digital home for Amharic proverbs and the wisdom they carry. We collect, verify, and organize proverbs and their interpretations, then make them open and accessible for everyone — today and for generations to come."
 
-#: src/routes/about/+page.svelte
 #: src/routes/download/+page.svelte
 msgid "Proverbs and growing"
 msgstr "Proverbs and growing"
 
-#: src/routes/about/+page.svelte
-msgid "Core Tables Proverbs & Interpretations"
-msgstr "Core Tables Proverbs & Interpretations"
+#~ msgid "Core Tables Proverbs & Interpretations"
+#~ msgstr "Core Tables Proverbs & Interpretations"
 
-#: src/routes/about/+page.svelte
-msgid "Mission: Preserve wisdom. Share culture."
-msgstr "Mission: Preserve wisdom. Share culture."
+#~ msgid "Mission: Preserve wisdom. Share culture."
+#~ msgstr "Mission: Preserve wisdom. Share culture."
 
 #: src/routes/about/+page.svelte
 msgid "Our Story"
 msgstr "Our Story"
 
-#: src/routes/about/+page.svelte
-msgid "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered in notebooks, books, and conversations, could live in one open place — for everyone to read, learn, and build with?"
-msgstr "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered in notebooks, books, and conversations, could live in one open place — for everyone to read, learn, and build with?"
+#~ msgid "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered in notebooks, books, and conversations, could live in one open place — for everyone to read, learn, and build with?"
+#~ msgstr "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered in notebooks, books, and conversations, could live in one open place — for everyone to read, learn, and build with?"
 
-#: src/routes/about/+page.svelte
-msgid "We gathered proverbs from many sources, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
-msgstr "We gathered proverbs from many sources, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
+#~ msgid "We gathered proverbs from many sources, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
+#~ msgstr "We gathered proverbs from many sources, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
 
 #: src/routes/about/+page.svelte
 msgid "Today, Abbabal is an open platform for learning, research, and creativity."
 msgstr "Today, Abbabal is an open platform for learning, research, and creativity."
 
-#: src/routes/about/+page.svelte
-msgid "የትምህርት እሴት በቲወጂ ይሞታል፡"
-msgstr "የትምህርት እሴት በቲወጂ ይሞታል፡"
+#~ msgid "የትምህርት እሴት በቲወጂ ይሞታል፡"
+#~ msgstr "የትምህርት እሴት በቲወጂ ይሞታል፡"
 
-#: src/routes/about/+page.svelte
-msgid "(Ye-timirt eset be-tweded yetebekal.)"
-msgstr "(Ye-timirt eset be-tweded yetebekal.)"
+#~ msgid "(Ye-timirt eset be-tweded yetebekal.)"
+#~ msgstr "(Ye-timirt eset be-tweded yetebekal.)"
 
-#: src/routes/about/+page.svelte
-msgid "The value of wisdom remains through generations."
-msgstr "The value of wisdom remains through generations."
+#~ msgid "The value of wisdom remains through generations."
+#~ msgstr "The value of wisdom remains through generations."
 
-#: src/routes/about/+page.svelte
-msgid "(Wisdom that is useful is never forgotten.)"
-msgstr "(Wisdom that is useful is never forgotten.)"
+#~ msgid "(Wisdom that is useful is never forgotten.)"
+#~ msgstr "(Wisdom that is useful is never forgotten.)"
 
-#: src/routes/about/+page.svelte
-msgid "Want the full behind-the-scenes story?"
-msgstr "Want the full behind-the-scenes story?"
+#~ msgid "Want the full behind-the-scenes story?"
+#~ msgstr "Want the full behind-the-scenes story?"
 
-#: src/routes/about/+page.svelte
-msgid "See how Abbabal was made, the challenges we faced, and the stack we used."
-msgstr "See how Abbabal was made, the challenges we faced, and the stack we used."
+#~ msgid "See how Abbabal was made, the challenges we faced, and the stack we used."
+#~ msgstr "See how Abbabal was made, the challenges we faced, and the stack we used."
 
-#: src/routes/about/+page.svelte
-msgid "Read the full story <0/>"
-msgstr "Read the full story <0/>"
+#~ msgid "Read the full story <0/>"
+#~ msgstr "Read the full story <0/>"
 
-#: src/routes/about/+page.svelte
-msgid "Authentic & Verified"
-msgstr "Authentic & Verified"
+#~ msgid "Authentic & Verified"
+#~ msgstr "Authentic & Verified"
 
-#: src/routes/about/+page.svelte
-msgid "Collected from elders, books, archives, and everyday life. Reviewed and cleaned for accuracy and authenticity."
-msgstr "Collected from elders, books, archives, and everyday life. Reviewed and cleaned for accuracy and authenticity."
+#~ msgid "Collected from elders, books, archives, and everyday life. Reviewed and cleaned for accuracy and authenticity."
+#~ msgstr "Collected from elders, books, archives, and everyday life. Reviewed and cleaned for accuracy and authenticity."
 
-#: src/routes/about/+page.svelte
 #: src/routes/documentation/+page.svelte
 msgid "Open & Free"
 msgstr "Open & Free"
@@ -262,61 +243,47 @@ msgstr "Open & Free"
 #~ msgid "Open data under the MIT License. Use it in your projects, research, apps, and products — freely."
 #~ msgstr "Open data under the MIT License. Use it in your projects, research, apps, and products — freely."
 
-#: src/routes/about/+page.svelte
-msgid "Well-structured data, a simple REST API, and clear docs to help you build something meaningful."
-msgstr "Well-structured data, a simple REST API, and clear docs to help you build something meaningful."
+#~ msgid "Well-structured data, a simple REST API, and clear docs to help you build something meaningful."
+#~ msgstr "Well-structured data, a simple REST API, and clear docs to help you build something meaningful."
 
-#: src/routes/about/+page.svelte
-msgid "Built for the Future"
-msgstr "Built for the Future"
+#~ msgid "Built for the Future"
+#~ msgstr "Built for the Future"
 
-#: src/routes/about/+page.svelte
-msgid "We're building tools and resources that keep Amharic wisdom alive in the digital age."
-msgstr "We're building tools and resources that keep Amharic wisdom alive in the digital age."
+#~ msgid "We're building tools and resources that keep Amharic wisdom alive in the digital age."
+#~ msgstr "We're building tools and resources that keep Amharic wisdom alive in the digital age."
 
-#: src/routes/about/+page.svelte
-msgid "What Makes Abbabal Special"
-msgstr "What Makes Abbabal Special"
+#~ msgid "What Makes Abbabal Special"
+#~ msgstr "What Makes Abbabal Special"
 
-#: src/routes/about/+page.svelte
-msgid "Data & Technology"
-msgstr "Data & Technology"
+#~ msgid "Data & Technology"
+#~ msgstr "Data & Technology"
 
-#: src/routes/about/+page.svelte
-msgid "Backend"
-msgstr "Backend"
+#~ msgid "Backend"
+#~ msgstr "Backend"
 
-#: src/routes/about/+page.svelte
-msgid "NestJS"
-msgstr "NestJS"
+#~ msgid "NestJS"
+#~ msgstr "NestJS"
 
-#: src/routes/about/+page.svelte
-msgid "Database"
-msgstr "Database"
+#~ msgid "Database"
+#~ msgstr "Database"
 
-#: src/routes/about/+page.svelte
-msgid "SQLite"
-msgstr "SQLite"
+#~ msgid "SQLite"
+#~ msgstr "SQLite"
 
-#: src/routes/about/+page.svelte
-msgid "Modern Stack"
-msgstr "Modern Stack"
+#~ msgid "Modern Stack"
+#~ msgstr "Modern Stack"
 
-#: src/routes/about/+page.svelte
-msgid "Built with modern, open source technologies."
-msgstr "Built with modern, open source technologies."
+#~ msgid "Built with modern, open source technologies."
+#~ msgstr "Built with modern, open source technologies."
 
-#: src/routes/about/+page.svelte
-msgid "<0>proverbs</0><1/> id (PK)<2/> amharic_text<3/> transliteration<4/> literal_translation<5/> ..."
-msgstr "<0>proverbs</0><1/> id (PK)<2/> amharic_text<3/> transliteration<4/> literal_translation<5/> ..."
+#~ msgid "<0>proverbs</0><1/> id (PK)<2/> amharic_text<3/> transliteration<4/> literal_translation<5/> ..."
+#~ msgstr "<0>proverbs</0><1/> id (PK)<2/> amharic_text<3/> transliteration<4/> literal_translation<5/> ..."
 
-#: src/routes/about/+page.svelte
-msgid "Structured Data: Abbabal is built on a clean, relational structure with two core tables."
-msgstr "Structured Data: Abbabal is built on a clean, relational structure with two core tables."
+#~ msgid "Structured Data: Abbabal is built on a clean, relational structure with two core tables."
+#~ msgstr "Structured Data: Abbabal is built on a clean, relational structure with two core tables."
 
-#: src/routes/about/+page.svelte
-msgid "Explore the API <0/>"
-msgstr "Explore the API <0/>"
+#~ msgid "Explore the API <0/>"
+#~ msgstr "Explore the API <0/>"
 
 #: src/routes/about/+page.svelte
 #: src/routes/about/+page.svelte
@@ -335,21 +302,17 @@ msgstr "Based in Ethiopia. Passionate about open data, culture, and tools that e
 msgid "I believe that preserving our wisdom is one of the best ways to build a better future."
 msgstr "I believe that preserving our wisdom is one of the best ways to build a better future."
 
-#: src/routes/about/+page.svelte
-msgid "More about me <0/>"
-msgstr "More about me <0/>"
+#~ msgid "More about me <0/>"
+#~ msgstr "More about me <0/>"
 
-#: src/routes/about/+page.svelte
-msgid "A Community Effort"
-msgstr "A Community Effort"
+#~ msgid "A Community Effort"
+#~ msgstr "A Community Effort"
 
-#: src/routes/about/+page.svelte
-msgid "Abbabal grows with your help. Contribute proverbs, improve translations, report issues, or suggest ideas."
-msgstr "Abbabal grows with your help. Contribute proverbs, improve translations, report issues, or suggest ideas."
+#~ msgid "Abbabal grows with your help. Contribute proverbs, improve translations, report issues, or suggest ideas."
+#~ msgstr "Abbabal grows with your help. Contribute proverbs, improve translations, report issues, or suggest ideas."
 
-#: src/routes/about/+page.svelte
-msgid "Get involved <0/>"
-msgstr "Get involved <0/>"
+#~ msgid "Get involved <0/>"
+#~ msgstr "Get involved <0/>"
 
 #: src/routes/documentation/+page.svelte
 msgid "List Proverbs"
@@ -1487,9 +1450,8 @@ msgstr "ጣፋጭ እና አስተማሪ የአማርኛ አባባሎችን በ�
 msgid "Abbabal is built using proverbs collected and shared by the <0>አማርኛ አባባሎች</0> Telegram channel. We deeply appreciate their effort in preserving and sharing our cultural wisdom. <1/>"
 msgstr "Abbabal is built using proverbs collected and shared by the <0>አማርኛ አባባሎች</0> Telegram channel. We deeply appreciate their effort in preserving and sharing our cultural wisdom. <1/>"
 
-#: src/routes/about/+page.svelte
-msgid "Open data under CC BY 4.0. Use it in your projects, research, apps, and products — freely."
-msgstr "Open data under CC BY 4.0. Use it in your projects, research, apps, and products — freely."
+#~ msgid "Open data under CC BY 4.0. Use it in your projects, research, apps, and products — freely."
+#~ msgstr "Open data under CC BY 4.0. Use it in your projects, research, apps, and products — freely."
 
 #: src/routes/download/+page.svelte
 msgid "<0/> CC BY 4.0"
@@ -1660,17 +1622,21 @@ msgstr "API Playground — Try the Abbabal Proverbs API"
 msgid "Test the Abbabal REST API interactively: try list, search, random, and lookup endpoints for Amharic proverbs with translations."
 msgstr "Test the Abbabal REST API interactively: try list, search, random, and lookup endpoints for Amharic proverbs with translations."
 
-#~ msgid "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered across everywhere could live in one open place — for everyone to read, learn, and build with?"
-#~ msgstr "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered across everywhere could live in one open place — for everyone to read, learn, and build with?"
+#: src/routes/about/+page.svelte
+msgid "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered across everywhere could live in one open place — for everyone to read, learn, and build with?"
+msgstr "Abbabal started as a simple idea: What if thousands of Amharic proverbs, scattered across everywhere could live in one open place — for everyone to read, learn, and build with?"
 
-#~ msgid "We gathered the proverbs, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
-#~ msgstr "We gathered the proverbs, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
+#: src/routes/about/+page.svelte
+msgid "We gathered the proverbs, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
+msgstr "We gathered the proverbs, verified them carefully, and paired each one with clear interpretations. Then we built the tools — a website, an API, and a mobile app — to make this wisdom easy to access and use."
 
-#~ msgid "Built by"
-#~ msgstr "Built by"
+#: src/routes/about/+page.svelte
+msgid "Built by"
+msgstr "Built by"
 
-#~ msgid "Personal site <0/>"
-#~ msgstr "Personal site <0/>"
+#: src/routes/about/+page.svelte
+msgid "Personal site <0/>"
+msgstr "Personal site <0/>"
 
 #~ msgid "Jan"
 #~ msgstr "Jan"
@@ -1714,26 +1680,33 @@ msgstr "Test the Abbabal REST API interactively: try list, search, random, and l
 #~ msgid "@codenshii"
 #~ msgstr "@codenshii"
 
-#~ msgid "Forwarded from {0}"
-#~ msgstr "Forwarded from {0}"
+#. 0: msg.forwardedFrom
+#: src/lib/components/StoryTimeline.svelte
+msgid "Forwarded from {0}"
+msgstr "Forwarded from {0}"
 
 #~ msgid "<0/> UTC"
 #~ msgstr "<0/> UTC"
 
-#~ msgid "View on Telegram <0/>"
-#~ msgstr "View on Telegram <0/>"
+#: src/lib/components/StoryTimeline.svelte
+msgid "View on Telegram <0/>"
+msgstr "View on Telegram <0/>"
 
-#~ msgid "The Full Story"
-#~ msgstr "The Full Story"
+#: src/routes/about/+page.svelte
+msgid "The Full Story"
+msgstr "The Full Story"
 
-#~ msgid "How Abbabal was <0>actually</0> built"
-#~ msgstr "How Abbabal was <0>actually</0> built"
+#: src/routes/about/+page.svelte
+msgid "How Abbabal was <0>actually</0> built"
+msgstr "How Abbabal was <0>actually</0> built"
 
-#~ msgid "Every milestone, dead end, and facepalm — posted as it happened on my Telegram channel. From scraping the first 7,000 proverbs to shipping the mobile app, in my own words."
-#~ msgstr "Every milestone, dead end, and facepalm — posted as it happened on my Telegram channel. From scraping the first 7,000 proverbs to shipping the mobile app, in my own words."
+#: src/routes/about/+page.svelte
+msgid "Every milestone, dead end, and facepalm — posted as it happened on my Telegram channel. From scraping the first 7,000 proverbs to shipping the mobile app, in my own words."
+msgstr "Every milestone, dead end, and facepalm — posted as it happened on my Telegram channel. From scraping the first 7,000 proverbs to shipping the mobile app, in my own words."
 
-#~ msgid "<0/> Follow @codenshii <1/>"
-#~ msgstr "<0/> Follow @codenshii <1/>"
+#: src/routes/about/+page.svelte
+msgid "<0/> Follow @codenshii <1/>"
+msgstr "<0/> Follow @codenshii <1/>"
 
 #: src/lib/components/Nav.svelte
 msgid "Switch to Amharic"
@@ -1802,7 +1775,6 @@ msgstr "/download"
 #: src/lib/components/Footer.svelte
 #: src/lib/components/Nav.svelte
 #: src/routes/+page.svelte
-#: src/routes/about/+page.svelte
 #, url:main
 msgid "/documentation"
 msgstr "/documentation"
