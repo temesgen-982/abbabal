@@ -656,15 +656,13 @@ msgstr "<0/> Download abbabal.db"
 msgid "Abbabal Mobile App"
 msgstr "Abbabal Mobile App"
 
-#: src/routes/download/+page.svelte
-msgid "Coming Soon"
-msgstr "Coming Soon"
+#~ msgid "Coming Soon"
+#~ msgstr "Coming Soon"
 
 #: src/routes/download/+page.svelte
 msgid "<0/> Daily inspiration"
 msgstr "<0/> Daily inspiration"
 
-#: src/routes/+page.svelte
 #: src/routes/download/+page.svelte
 msgid "<0/> Save favorites"
 msgstr "<0/> Save favorites"
@@ -689,17 +687,14 @@ msgstr "Platform"
 msgid "Android"
 msgstr "Android"
 
-#: src/routes/download/+page.svelte
-msgid "Status"
-msgstr "Status"
+#~ msgid "Status"
+#~ msgstr "Status"
 
-#: src/routes/download/+page.svelte
-msgid "In Development"
-msgstr "In Development"
+#~ msgid "In Development"
+#~ msgstr "In Development"
 
-#: src/routes/download/+page.svelte
-msgid "<0/> Coming Soon"
-msgstr "<0/> Coming Soon"
+#~ msgid "<0/> Coming Soon"
+#~ msgstr "<0/> Coming Soon"
 
 #: src/routes/download/+page.svelte
 msgid "<0/> proverbs"
@@ -1195,6 +1190,7 @@ msgstr "<0/> Browse proverbs"
 #~ msgid "Try again"
 #~ msgstr "Try again"
 
+#: src/lib/components/PhoneMockup.svelte
 #: src/routes/proverbs/[id]/+page.svelte
 msgid "Meaning"
 msgstr "Meaning"
@@ -1380,25 +1376,21 @@ msgstr "\"date\": <0/>,"
 msgid "\"interpretations\": [<0/>]"
 msgstr "\"interpretations\": [<0/>]"
 
-#: src/routes/+page.svelte
-msgid "<0/> Daily wisdom"
-msgstr "<0/> Daily wisdom"
+#~ msgid "<0/> Daily wisdom"
+#~ msgstr "<0/> Daily wisdom"
 
-#: src/routes/+page.svelte
-msgid "<0/> Offline access"
-msgstr "<0/> Offline access"
+#~ msgid "<0/> Offline access"
+#~ msgstr "<0/> Offline access"
 
-#: src/routes/+page.svelte
-msgid "Mobile App"
-msgstr "Mobile App"
+#~ msgid "Mobile App"
+#~ msgstr "Mobile App"
 
 #: src/routes/+page.svelte
 msgid "The wisdom, in your pocket."
 msgstr "The wisdom, in your pocket."
 
-#: src/routes/+page.svelte
-msgid "Abbabal for Android — daily proverbs, favorites, search, and full offline access. Currently in development."
-msgstr "Abbabal for Android — daily proverbs, favorites, search, and full offline access. Currently in development."
+#~ msgid "Abbabal for Android — daily proverbs, favorites, search, and full offline access. Currently in development."
+#~ msgstr "Abbabal for Android — daily proverbs, favorites, search, and full offline access. Currently in development."
 
 #: src/routes/+page.svelte
 msgid "See the app page <0/>"
@@ -1515,6 +1507,7 @@ msgstr "Browse and search {0}+ Amharic proverbs (አባባሎች). Each proverb 
 msgid "CollectionPage"
 msgstr "CollectionPage"
 
+#: src/lib/components/PhoneMockup.svelte
 #: src/routes/proverbs/+page.svelte
 msgid "Amharic Proverbs"
 msgstr "Amharic Proverbs"
@@ -1765,7 +1758,6 @@ msgstr "/about"
 
 #: src/lib/components/Footer.svelte
 #: src/lib/components/Nav.svelte
-#: src/routes/+page.svelte
 #: src/routes/about/+page.svelte
 #: src/routes/download/+page.svelte
 #, url:main
@@ -1783,3 +1775,89 @@ msgstr "/documentation"
 #, url:main
 msgid "/playground"
 msgstr "/playground"
+
+#: src/routes/+page.svelte
+msgid "Daily wisdom"
+msgstr "Daily wisdom"
+
+#: src/routes/+page.svelte
+msgid "Save favourites"
+msgstr "Save favourites"
+
+#: src/routes/+page.svelte
+msgid "Search & browse"
+msgstr "Search & browse"
+
+#: src/routes/+page.svelte
+msgid "Full offline access"
+msgstr "Full offline access"
+
+#: src/routes/+page.svelte
+#: src/routes/download/+page.svelte
+msgid "<0/> Download APK"
+msgstr "<0/> Download APK"
+
+#: src/routes/+page.svelte
+msgid "<0/> Android app"
+msgstr "<0/> Android app"
+
+#. 0: proverbCount ? Number(proverbCount).toLocaleString() \\: '3,000'
+#: src/routes/+page.svelte
+msgid "Take Abbabal anywhere — a calm, offline-first feed of {0}+ proverbs with translations and meanings. No accounts, no tracking."
+msgstr "Take Abbabal anywhere — a calm, offline-first feed of {0}+ proverbs with translations and meanings. No accounts, no tracking."
+
+#: src/routes/+page.svelte
+msgid "Free & open source · Android 7.0+ · Sideload the APK (Play Store coming soon)"
+msgstr "Free & open source · Android 7.0+ · Sideload the APK (Play Store coming soon)"
+
+#~ msgid "Being too picky can leave you worse off than before."
+#~ msgstr "Being too picky can leave you worse off than before."
+
+#~ msgid "Those closest to the work know it best."
+#~ msgstr "Those closest to the work know it best."
+
+#~ msgid "ይጥሉህ አትጥላቸው"
+#~ msgstr "ይጥሉህ አትጥላቸው"
+
+#~ msgid "Let them wrong you — don't wrong them."
+#~ msgstr "Let them wrong you — don't wrong them."
+
+#~ msgid "Rise above revenge and keep your integrity."
+#~ msgstr "Rise above revenge and keep your integrity."
+
+#~ msgid "Random"
+#~ msgstr "Random"
+
+#~ msgid "Saved"
+#~ msgstr "Saved"
+
+#~ msgid "Profile"
+#~ msgstr "Profile"
+
+#: src/lib/components/PhoneMockup.svelte
+msgid "አባባል"
+msgstr "አባባል"
+
+#: src/lib/components/PhoneMockup.svelte
+msgid "Proverb"
+msgstr "Proverb"
+
+#: src/routes/download/+page.svelte
+msgid "Android 7.0+"
+msgstr "Android 7.0+"
+
+#: src/routes/download/+page.svelte
+msgid "Price"
+msgstr "Price"
+
+#: src/routes/download/+page.svelte
+msgid "Free & open source"
+msgstr "Free & open source"
+
+#: src/routes/download/+page.svelte
+msgid "<0/> Releases"
+msgstr "<0/> Releases"
+
+#: src/routes/download/+page.svelte
+msgid "Sideload the APK after allowing installs from unknown sources. A Play Store release is planned."
+msgstr "Sideload the APK after allowing installs from unknown sources. A Play Store release is planned."

@@ -9,6 +9,22 @@ The version is shared by every workspace package: it lives in the root
 `package.json` and is mirrored by the apps, as well as the Android
 `versionName` / `versionCode`. See the README for the release process.
 
+## [Unreleased]
+
+### Changed
+
+- **Web — app download experience.** The landing page's app card now shows a
+  phone mockup of the app and links straight to the latest signed APK
+  (`…/releases/latest/download/abbabal.apk`). The download page's app tab is
+  deep-linkable (`/download?tab=mobile`).
+
+### Fixed
+
+- **Web — the app download link landed on the wrong tab.** The landing page's
+  "Get the app" button opened the download page on its Database tab, hiding the
+  Android app. It now opens the app tab directly, and the card itself downloads
+  the APK.
+
 ## [0.1.0] - 2026-10-16
 
 First public version of the Abbabal monorepo: a NestJS API, a SvelteKit web
@@ -23,8 +39,8 @@ app, and a Capacitor Android app built on a shared Amharic proverb dataset.
   `GET /proverbs/batch` endpoint that returns many proverbs with their
   interpretations for incremental client sync.
 - **Web** (`apps/web`): landing, about, documentation and download pages, a
-  public API playground, proverb browsing and detail views, and a dashboard for
-  API keys, usage, and admin management. Localized (Amharic / English) routes.
+  public API playground, and proverb browsing and detail views. Localized
+  (Amharic / English) routes.
 - **Mobile** (`apps/mobile`, Android):
   - Offline-first feed with infinite scroll, search, random proverb, detail,
     and saved proverbs.

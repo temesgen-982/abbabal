@@ -1,10 +1,29 @@
 <script lang="ts">
   import { BookOpen, Database, Heart, Download, ExternalLink, ArrowUpRight, Smartphone } from '@lucide/svelte';
+  import { page } from '$app/state';
+  import { replaceState } from '$app/navigation';
+  import { browser } from '$app/environment';
   import type { PageData } from './$types';
   import Seo from '$lib/seo/Seo.svelte';
 
   let { data }: { data: PageData } = $props();
-  let activeTab = $state<'database' | 'mobile'>('database');
+
+  type Tab = 'database' | 'mobile';
+
+  // Deep-linkable: /download?tab=mobile opens the app tab (the homepage links
+  // straight here so "get the app" never lands on the database card).
+  let activeTab = $state<Tab>(
+    page.url.searchParams.get('tab') === 'mobile' ? 'mobile' : 'database'
+  );
+
+  function selectTab(tab: Tab) {
+    activeTab = tab;
+    if (!browser) return;
+    const url = new URL(page.url);
+    if (tab === 'mobile') url.searchParams.set('tab', 'mobile');
+    else url.searchParams.delete('tab');
+    replaceState(url, {});
+  }
 
   // The workflow publishes a stable asset name (abbabal.apk), so this URL always
   // points at the newest signed build.
@@ -31,10 +50,10 @@
         Download our full dataset or mobile app and explore {data.proverbs ? Number(data.proverbs).toLocaleString() : '7,000+'}+ Amharic proverbs anytime, anywhere.
       </p>
       <div class="mt-6 flex gap-6 border-b border-border">
-        <button onclick={() => activeTab = 'database'} class="flex items-center gap-2 pb-3 text-sm font-semibold transition-colors {activeTab === 'database' ? 'text-foreground border-b-2 border-primary' : 'text-muted-foreground'}">
+        <button onclick={() => selectTab('database')} class="flex items-center gap-2 pb-3 text-sm font-semibold transition-colors {activeTab === 'database' ? 'text-foreground border-b-2 border-primary' : 'text-muted-foreground'}">
           <Database size={16} /> Database
         </button>
-        <button onclick={() => activeTab = 'mobile'} class="flex items-center gap-2 pb-3 text-sm font-semibold transition-colors {activeTab === 'mobile' ? 'text-foreground border-b-2 border-primary' : 'text-muted-foreground'}">
+        <button onclick={() => selectTab('mobile')} class="flex items-center gap-2 pb-3 text-sm font-semibold transition-colors {activeTab === 'mobile' ? 'text-foreground border-b-2 border-primary' : 'text-muted-foreground'}">
           <Smartphone size={16} /> Mobile App
         </button>
       </div>

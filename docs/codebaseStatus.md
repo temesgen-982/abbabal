@@ -49,10 +49,10 @@ holds row types for the two tables: `proverbs` and `interpretations`.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Landing page | ✅ | Hero, stats, features, API showcase, FAQ |
+| Landing page | ✅ | Hero, stats, features, API showcase, FAQ, app card with a phone mockup + direct APK download |
 | About page | ✅ | Mission + Telegram build-log timeline |
 | Documentation | ✅ | API reference and examples |
-| Download page | ✅ | Database + Android app cards (links to latest APK) |
+| Download page | ✅ | Database + Android app cards (links to latest APK; app tab deep-linkable via `?tab=mobile`) |
 | Playground | ✅ | Public API request builder |
 | Proverbs listing | ✅ | `/proverbs` |
 | Proverb detail | ✅ | `/proverbs/[id]` — translations, meanings, share/copy, SEO |
@@ -124,6 +124,10 @@ Deployed on Vercel via `@sveltejs/adapter-auto`.
    env file or type declaration exists, so it always falls back to
    `https://abbabal-api.onrender.com`. Wire it through SvelteKit's `$env` if it
    needs to be configurable per environment.
+7. **Some newer web strings are untranslated in Amharic.** `apps/web/src/locales/am.po`
+   has active entries with empty `msgstr` (including parts of the app card added
+   on the landing/download pages); they fall back to English. After editing copy,
+   run `pnpm --filter @abbabal/web i18n` to extract, then fill in the new `msgid`s.
 
 ## Route maps
 

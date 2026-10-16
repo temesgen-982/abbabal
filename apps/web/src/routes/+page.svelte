@@ -7,6 +7,7 @@
     Code2,
     Copy,
     Database,
+    Download,
     Heart,
     Search,
     Shuffle,
@@ -14,11 +15,18 @@
   } from '@lucide/svelte';
   import type { PageData } from './$types';
   import DataSource from '$lib/components/DataSource.svelte';
+  import PhoneMockup from '$lib/components/PhoneMockup.svelte';
   import Seo from '$lib/seo/Seo.svelte';
   import { getSiteUrl } from '$lib/seo/site.js';
   import { localize } from '$lib/i18n.js';
 
   let { data }: { data: PageData } = $props();
+
+  // The release workflow publishes a stable asset name (abbabal.apk), so this
+  // URL always points at the newest signed build.
+  const repoUrl = 'https://github.com/temesgen-982/abbabal';
+  const apkUrl = `${repoUrl}/releases/latest/download/abbabal.apk`;
+  const appPageHref = `${localize('/download', data.locale)}?tab=mobile`;
 
   let copied = $state(false);
 
@@ -371,26 +379,56 @@
   </section>
 
   <!-- Get the App -->
-  <section class="mb-16 flex flex-col gap-8 rounded-2xl border border-border bg-secondary p-8 md:flex-row md:items-center md:justify-between md:p-10">
-    <div class="flex items-start gap-5">
-      <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md">
-        <Smartphone size={28} />
-      </div>
+  <section class="mb-16 overflow-hidden rounded-3xl border border-border bg-secondary">
+    <div class="grid gap-10 p-8 md:grid-cols-[1.1fr_1fr] md:items-center md:p-12">
       <div>
-        <p class="text-xs font-bold uppercase tracking-[0.08em] text-primary">Mobile App</p>
-        <h2 class="mt-2 text-2xl font-extrabold tracking-tight">The wisdom, in your pocket.</h2>
-        <p class="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
-          Abbabal for Android — daily proverbs, favorites, search, and full offline access. Currently in development.
+        <span
+          class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-bold tracking-[0.08em] text-primary uppercase"
+        >
+          <Smartphone size={13} /> Android app
+        </span>
+        <h2 class="mt-4 text-2xl font-extrabold tracking-tight md:text-3xl">
+          The wisdom, in your pocket.
+        </h2>
+        <p class="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
+          Take Abbabal anywhere — a calm, offline-first feed of {proverbCount
+            ? Number(proverbCount).toLocaleString()
+            : '3,000'}+ proverbs with translations and meanings. No accounts, no tracking.
         </p>
-        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-foreground">
-          <span class="flex items-center gap-1.5"><BookOpen size={13} class="text-primary" /> Daily wisdom</span>
-          <span class="flex items-center gap-1.5"><Heart size={13} class="text-primary" /> Save favorites</span>
-          <span class="flex items-center gap-1.5"><Database size={13} class="text-primary" /> Offline access</span>
+        <ul class="mt-5 grid max-w-md gap-2.5 text-sm sm:grid-cols-2">
+          {#each [
+            { icon: BookOpen, label: 'Daily wisdom' },
+            { icon: Heart, label: 'Save favourites' },
+            { icon: Search, label: 'Search & browse' },
+            { icon: Database, label: 'Full offline access' },
+          ] as feature}
+            <li class="flex items-center gap-2 font-medium text-foreground">
+              <feature.icon size={15} class="shrink-0 text-primary" />
+              {feature.label}
+            </li>
+          {/each}
+        </ul>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a
+            href={apkUrl}
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            <Download size={16} /> Download APK
+          </a>
+          <a
+            href={appPageHref}
+            class="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold transition-colors hover:bg-muted"
+          >
+            See the app page <ArrowRight size={14} />
+          </a>
         </div>
+        <p class="mt-3 text-[11px] text-muted-foreground">
+          Free &amp; open source · Android 7.0+ · Sideload the APK (Play Store coming soon)
+        </p>
+      </div>
+      <div class="flex justify-center md:justify-end">
+        <PhoneMockup />
       </div>
     </div>
-    <a href="/download" class="inline-flex shrink-0 items-center gap-2 self-start rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 md:self-auto">
-      See the app page <ArrowRight size={14} />
-    </a>
   </section>
 </div>
