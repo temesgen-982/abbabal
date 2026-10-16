@@ -1,10 +1,15 @@
 import type { LayoutLoad } from './$types';
-import { browser } from '$app/environment';
+import { browser, dev } from '$app/environment';
+import { injectAnalytics } from '@vercel/analytics/sveltekit';
 import { loadLocale } from 'wuchale/load-utils';
 import { localeFromPathname } from '$lib/i18n';
 
 import '../locales/main.loader.svelte.js';
 import '../locales/js.loader.js';
+
+// Vercel Web Analytics. `injectAnalytics` is a no-op during SSR and installs the
+// tracking script plus SvelteKit route support in the browser.
+injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 export const load: LayoutLoad = async ({ url }) => {
 	// The path is the locale: `reroute` (src/hooks.ts) strips the prefix before

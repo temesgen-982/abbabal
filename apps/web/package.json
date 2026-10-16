@@ -50,6 +50,7 @@
 		"vite": "^7.3.1"
 	},
 	"dependencies": {
+		"@vercel/analytics": "^2.0.1",
 		"@wuchale/svelte": "^0.20.5",
 		"d3-scale": "^4.0.2",
 		"d3-shape": "^3.2.0",
