@@ -39,8 +39,10 @@ jobs:
             exit 1
           fi
 
-          # Tolerate spaces/newlines/carriage returns introduced by copy-paste.
-          CLEANED="$(printf '%s' "$ANDROID_KEYSTORE_BASE64" | tr -d '[:space:]')"
+          # Keep only base64 characters. This removes spaces/newlines and stray
+          # characters that copy-paste picks up — e.g. the "%" zsh prints after
+          # output with no trailing newline (base64 -w0 has none).
+          CLEANED="$(printf '%s' "$ANDROID_KEYSTORE_BASE64" | tr -dc 'A-Za-z0-9+/=')"
           echo "Base64 length after cleanup: ${#CLEANED}"
 
           if ! printf '%s' "$CLEANED" | base64 -d > "$RUNNER_TEMP/abbabal-release.keystore" 2>/dev/null; then
