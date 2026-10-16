@@ -38,7 +38,28 @@ jobs:
             echo "::error::ANDROID_KEYSTORE_BASE64 secret is not set"
             exit 1
           fi
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/abbabal-release.keystore"
+
+          # Tolerate spaces/newlines/carriage returns introduced by copy-paste.
+          CLEANED="$(printf '%s' "$ANDROID_KEYSTORE_BASE64" | tr -d '[:space:]')"
+          echo "Base64 length after cleanup: ${#CLEANED}"
+
+          if ! printf '%s' "$CLEANED" | base64 -d > "$RUNNER_TEMP/abbabal-release.keystore" 2>/dev/null; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 is not valid base64. Re-set the secret with: base64 -w0 apps/mobile/android/abbabal-release.keystore"
+            exit 1
+          fi
+
+          size=$(stat -c%s "$RUNNER_TEMP/abbabal-release.keystore")
+          magic=$(od -An -tx1 -N4 "$RUNNER_TEMP/abbabal-release.keystore" | tr -d ' ')
+          echo "Decoded keystore: $size bytes, magic $magic"
+
+          # PKCS#12 starts with 3082, JKS with feedfeed.
+          case "$magic" in
+            3082*|feedfeed*) echo "Keystore format looks valid." ;;
+            *)
+              echo "::error::Decoded file is not a valid keystore (magic $magic). The secret is likely truncated or wrong."
+              exit 1
+              ;;
+          esac
 
       - name: Build web assets
         run: pnpm --filter @abbabal/mobile build
