@@ -17,6 +17,10 @@ The version is shared by every workspace package: it lives in the root
   phone mockup of the app and links straight to the latest signed APK
   (`…/releases/latest/download/abbabal.apk`). The download page's app tab is
   deep-linkable (`/download?tab=mobile`).
+- **Web — shorter search placeholder.** The search fields now read
+  "Search Amharic or English…" (matching the Android app) instead of the longer
+  "Search proverbs in Amharic or English…", so the text no longer truncates on
+  small screens.
 
 ### Fixed
 

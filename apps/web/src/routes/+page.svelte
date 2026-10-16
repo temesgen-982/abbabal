@@ -124,11 +124,15 @@
         <input
           type="text"
           name="search"
-          placeholder="Search proverbs in Amharic or English..."
+          placeholder="Search Amharic or English..."
           class="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
         />
-        <button type="submit" class="cursor-pointer rounded-md bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
-          Search
+        <button
+          type="submit"
+          class="flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md bg-primary p-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:px-5 sm:py-2"
+        >
+          <Search size={16} />
+          <span class="sr-only sm:not-sr-only">Search</span>
         </button>
       </form>
     </div>

@@ -47,10 +47,8 @@ msgstr "One"
 msgid "Preserve wisdom. Share culture."
 msgstr "Preserve wisdom. Share culture."
 
-#: src/routes/+page.svelte
-#: src/routes/proverbs/+page.svelte
-msgid "Search proverbs in Amharic or English..."
-msgstr "Search proverbs in Amharic or English..."
+#~ msgid "Search proverbs in Amharic or English..."
+#~ msgstr "Search proverbs in Amharic or English..."
 
 #: src/routes/+page.svelte
 msgid "Search"
@@ -1861,3 +1859,8 @@ msgstr "<0/> Releases"
 #: src/routes/download/+page.svelte
 msgid "Sideload the APK after allowing installs from unknown sources. A Play Store release is planned."
 msgstr "Sideload the APK after allowing installs from unknown sources. A Play Store release is planned."
+
+#: src/routes/+page.svelte
+#: src/routes/proverbs/+page.svelte
+msgid "Search Amharic or English..."
+msgstr "Search Amharic or English..."

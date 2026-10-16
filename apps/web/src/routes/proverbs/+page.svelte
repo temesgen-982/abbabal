@@ -124,7 +124,7 @@
         type="text"
         name="search"
         value={searchInput}
-        placeholder="Search proverbs in Amharic or English..."
+        placeholder="Search Amharic or English..."
         class="w-full rounded-xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none shadow-sm placeholder:text-muted-foreground/60"
       />
     </form>
