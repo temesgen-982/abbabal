@@ -8,9 +8,20 @@
 
   let dark = $state(false);
 
+  // The inline script in app.html applies the stored theme before hydration, so
+  // adopt it after mount instead of guessing (avoids a hydration mismatch).
+  $effect(() => {
+    dark = document.documentElement.classList.contains('dark');
+  });
+
   function toggleTheme() {
     dark = !dark;
     document.documentElement.classList.toggle('dark', dark);
+    try {
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    } catch {
+      /* storage unavailable (private mode) — theme just won't persist */
+    }
   }
 
   // `href` is localized by wuchale: the extractor recognised these as URL
@@ -70,8 +81,9 @@
       </a>
       <button
         onclick={toggleTheme}
-        class="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+        aria-pressed={dark}
         aria-label="Toggle theme"
+        class="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
       >
         {#if dark}
           <Sun size={16} />
