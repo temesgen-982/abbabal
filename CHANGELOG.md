@@ -46,5 +46,9 @@ app, and a Capacitor Android app built on a shared Amharic proverb dataset.
   first feed query (and every other plugin call) for the duration of the
   download. Sync is now incremental: it diffs `GET /proverbs/ids` against the
   bundled database and fetches only what changed via `GET /proverbs/batch`.
+- **Mobile could not reach the JSON API.** The API's CORS allowlist replaced its
+  built-in defaults with `CORS_ORIGIN`, which omitted the Capacitor app-shell
+  origins (`https://localhost`, `capacitor://localhost`). The API now always
+  allows those origins alongside any configured ones.
 
 [0.1.0]: https://github.com/temesgen-982/abbabal/releases/tag/v0.1.0
