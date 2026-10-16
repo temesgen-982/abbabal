@@ -36,6 +36,39 @@ export class ProverbsService {
     return { total: Number(total), ids: rows };
   }
 
+  findMany(ids: number[]) {
+    if (!ids.length) return [];
+
+    const db = this.drizzle.db;
+    const placeholders = ids.map(() => '?').join(',');
+
+    const rows = db
+      .prepare(
+        `SELECT id, text, date, views, forwards, source, scraped_at as scrapedAt, created_at as createdAt, updated_at as updatedAt FROM proverbs WHERE id IN (${placeholders}) ORDER BY id ASC`,
+      )
+      .all(...ids) as Array<Record<string, any>>;
+
+    if (!rows.length) return [];
+
+    const interpRows = db
+      .prepare(
+        `SELECT id, proverb_id as proverbId, type, language, content, model, confidence, needs_review as needsReview, created_at as createdAt, updated_at as updatedAt FROM interpretations WHERE proverb_id IN (${placeholders}) ORDER BY id ASC`,
+      )
+      .all(...ids) as Array<Record<string, any>>;
+
+    const byProverb = new Map<number, unknown[]>();
+    for (const row of interpRows) {
+      const list = byProverb.get(row.proverbId) ?? [];
+      list.push(row);
+      byProverb.set(row.proverbId, list);
+    }
+
+    return rows.map((row) => ({
+      ...row,
+      interpretations: byProverb.get(row.id) ?? [],
+    }));
+  }
+
   findOne(id: number) {
     const db = this.drizzle.db;
     const row = db

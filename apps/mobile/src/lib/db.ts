@@ -6,7 +6,8 @@ import type { Interpretation, PaginatedProverbs, Proverb } from './api';
 const DB_NAME = 'proverbs';
 const LAST_SYNC_KEY = 'abbabal.lastSyncAt';
 
-export const SYNC_URL = '/proverbs.db';
+// How many proverbs to request/upsert per round trip during a sync.
+const SYNC_BATCH_SIZE = 50;
 
 type ProverbRow = {
   id: number;
@@ -31,6 +32,21 @@ type InterpretationRow = {
   needsReview: number | null;
   createdAt: string | null;
   updatedAt: string | null;
+};
+
+// Shapes returned by the API when syncing.
+type ServerInterpretation = InterpretationRow;
+type ServerProverb = {
+  id: number;
+  text: string;
+  date: string;
+  views: number | null;
+  forwards: number | null;
+  source: string | null;
+  scrapedAt: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  interpretations?: ServerInterpretation[];
 };
 
 const PROVERB_COLUMNS =
@@ -182,28 +198,147 @@ export const localDb = {
   },
 };
 
+const UPSERT_PROVERB_SQL =
+  'INSERT OR REPLACE INTO proverbs (id, text, date, views, forwards, source, scraped_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+const DELETE_PROVERB_INTERPS_SQL =
+  'DELETE FROM interpretations WHERE proverb_id = ?';
+const INSERT_INTERPRETATION_SQL =
+  'INSERT OR REPLACE INTO interpretations (id, proverb_id, type, language, content, model, confidence, needs_review, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+async function fetchJson<T>(url: string): Promise<T> {
+  // The manifest is cacheable server-side, but we always want a fresh view
+  // when deciding what changed.
+  const res = await fetch(url, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return (await res.json()) as T;
+}
+
+async function writeProverbs(
+  connection: SQLiteDBConnection,
+  proverbs: ServerProverb[],
+): Promise<void> {
+  if (!proverbs.length) return;
+  const set: { statement: string; values: unknown[] }[] = [];
+  for (const proverb of proverbs) {
+    set.push({
+      statement: UPSERT_PROVERB_SQL,
+      values: [
+        proverb.id,
+        proverb.text,
+        proverb.date,
+        proverb.views ?? 0,
+        proverb.forwards ?? 0,
+        proverb.source ?? 'telegram',
+        proverb.scrapedAt ?? null,
+        proverb.createdAt ?? null,
+        proverb.updatedAt ?? null,
+      ],
+    });
+    set.push({ statement: DELETE_PROVERB_INTERPS_SQL, values: [proverb.id] });
+    for (const interp of proverb.interpretations ?? []) {
+      set.push({
+        statement: INSERT_INTERPRETATION_SQL,
+        values: [
+          interp.id,
+          proverb.id,
+          interp.type,
+          interp.language,
+          interp.content,
+          interp.model ?? null,
+          interp.confidence ?? null,
+          interp.needsReview ?? 0,
+          interp.createdAt ?? null,
+          interp.updatedAt ?? null,
+        ],
+      });
+    }
+  }
+  await connection.executeSet(set, true);
+}
+
+async function deleteProverbs(
+  connection: SQLiteDBConnection,
+  ids: number[],
+): Promise<void> {
+  if (!ids.length) return;
+  const set: { statement: string; values: unknown[] }[] = [];
+  for (const id of ids) {
+    set.push({ statement: DELETE_PROVERB_INTERPS_SQL, values: [id] });
+    set.push({ statement: 'DELETE FROM proverbs WHERE id = ?', values: [id] });
+  }
+  await connection.executeSet(set, true);
+}
+
+/**
+ * Incremental sync.
+ *
+ * The local database ships with the app, so we only need to pull proverbs that
+ * were added or changed since the bundled snapshot — plus drop any that were
+ * removed. This avoids downloading the whole `.db` over the network, which the
+ * Android SQLite plugin does on Capacitor's single plugin thread and therefore
+ * blocks every other query while it runs.
+ */
 export async function syncDatabase(baseUrl: string): Promise<boolean> {
   if (!isNativePlatform()) return false;
+  const connection = await getConnection();
+  if (!connection) return false;
+
   try {
-    if (conn) {
-      await conn.close();
-      await getSqlite().closeConnection(DB_NAME, false);
-      conn = null;
+    const base = baseUrl.replace(/\/+$/, '');
+
+    // 1. Server manifest: every proverb id and its last-modified time.
+    const manifest = await fetchJson<{
+      total?: number;
+      ids: { id: number; updatedAt: string | null }[];
+    }>(`${base}/proverbs/ids`);
+    const server = manifest.ids ?? [];
+
+    // Never treat an empty/partial manifest as "everything was deleted".
+    if (!server.length) throw new Error('empty manifest');
+
+    // 2. Local manifest.
+    const localRows = await query<{ id: number; updatedAt: string | null }>(
+      'SELECT id, updated_at as updatedAt FROM proverbs',
+    );
+    const localUpdated = new Map(
+      localRows.map((row) => [row.id, row.updatedAt ?? null]),
+    );
+
+    // 3. Everything new or whose last-modified time differs.
+    const serverIds = new Set<number>();
+    const changedIds: number[] = [];
+    for (const entry of server) {
+      serverIds.add(entry.id);
+      const local = localUpdated.get(entry.id);
+      if (local === undefined || local !== (entry.updatedAt ?? null)) {
+        changedIds.push(entry.id);
+      }
     }
-    ready = null;
 
-    const url = `${baseUrl}${SYNC_URL}`;
-    await CapacitorSQLite.getFromHTTPRequest({ url, overwrite: true });
+    // 4. Proverbs removed on the server.
+    const removedIds = localRows
+      .map((row) => row.id)
+      .filter((id) => !serverIds.has(id));
 
-    await getConnection();
+    // 5. Fetch and upsert only what changed.
+    for (let i = 0; i < changedIds.length; i += SYNC_BATCH_SIZE) {
+      const chunk = changedIds.slice(i, i + SYNC_BATCH_SIZE);
+      const batch = await fetchJson<{ results: ServerProverb[] }>(
+        `${base}/proverbs/batch?ids=${chunk.join(',')}`,
+      );
+      await writeProverbs(connection, batch.results ?? []);
+    }
+
+    if (removedIds.length) {
+      await deleteProverbs(connection, removedIds);
+    }
+
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(LAST_SYNC_KEY, new Date().toISOString());
     }
     return true;
   } catch (e) {
     console.error('[db] sync failed', e);
-    ready = null;
-    conn = null;
     return false;
   }
 }

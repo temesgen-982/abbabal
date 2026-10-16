@@ -47,6 +47,27 @@ export class ProverbsController {
     return this.proverbsService.random();
   }
 
+  @Get('batch')
+  @ApiOperation({
+    summary: 'Get multiple proverbs (with interpretations) by id',
+  })
+  @ApiQuery({
+    name: 'ids',
+    required: true,
+    type: String,
+    example: '1,2,3',
+    description: 'Comma-separated proverb ids (max 200)',
+  })
+  batch(@Query('ids') ids: string) {
+    const list = (ids ?? '')
+      .split(',')
+      .map((value) => parseInt(value, 10))
+      .filter((value) => Number.isFinite(value))
+      .slice(0, 200);
+
+    return { results: this.proverbsService.findMany(list) };
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a proverb by ID' })
   @ApiParam({ name: 'id', type: Number })

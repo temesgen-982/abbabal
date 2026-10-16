@@ -23,7 +23,7 @@ data/          proverbs.db — the single source of truth for proverbs
    and publishes them into the same DB (scheduled).
 3. The API serves the DB directly (`GET /proverbs.db`, `GET /download`) and as a
    JSON API. The web app calls the JSON API; the mobile app bundles the DB and
-   refreshes it from the API.
+   refreshes it incrementally from the JSON API.
 
 ## API (`apps/api`)
 
@@ -34,7 +34,8 @@ data/          proverbs.db — the single source of truth for proverbs
 | Full DB download | ✅ | `GET /download` and `GET /proverbs.db` |
 | List proverbs | ✅ | `GET /proverbs?page&limit` |
 | Search | ✅ | `GET /proverbs/search?q&limit` (text + translations) |
-| Proverb IDs | ✅ | `GET /proverbs/ids` (cacheable, used for incremental sync) |
+| Proverb IDs | ✅ | `GET /proverbs/ids` (id + `updatedAt`, used to diff for incremental sync) |
+| Proverb batch | ✅ | `GET /proverbs/batch?ids=1,2,3` (with interpretations, max 200) |
 | Random proverb | ✅ | `GET /proverbs/random` |
 | Proverb detail | ✅ | `GET /proverbs/:id` |
 | Swagger docs | ✅ | `/docs` |
@@ -73,7 +74,7 @@ Deployed on Vercel via `@sveltejs/adapter-auto`.
 | Proverb detail | ✅ | Full detail view with share |
 | Saved proverbs | ✅ | Persisted to `localStorage` |
 | Profile page | ✅ | App version, manual sync, data source info |
-| Offline support | ✅ | Bundled SQLite + 24h background sync from the API |
+| Offline support | ✅ | Bundled SQLite + incremental sync from the JSON API (24h cadence) |
 | Native share sheet | ✅ | `@capacitor/share` |
 | Home-screen widget | ✅ | `ProverbWidget` reads the SQLite DB, shows a random proverb |
 | Icons / splash | ✅ | Generated from `packages/shared/assets` |
