@@ -12,6 +12,18 @@ const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
 
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
+	{
+		// Emitted by the wuchale CLI (see wuchale.config.js) — machine output.
+		ignores: [
+			'src/locales/.wuchale/',
+			'src/locales/data.js',
+			'src/locales/js.loader.js',
+			'src/locales/js.loader.server.js',
+			'src/locales/main.loader.svelte.js',
+			'src/locales/main.loader.server.svelte.js',
+			'src/locales/main.url.js'
+		]
+	},
 	js.configs.recommended,
 	ts.configs.recommended,
 	svelte.configs.recommended,
