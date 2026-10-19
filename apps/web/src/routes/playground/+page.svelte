@@ -1,72 +1,65 @@
 <script lang="ts">
-	import { Copy, Share2, Sparkles } from "@lucide/svelte";
-	import { PUBLIC_API_BASE_URL } from "$env/static/public";
-	import PlaygroundRequestPanel from "$lib/components/playground/PlaygroundRequestPanel.svelte";
-	import ResponsePreview from "$lib/components/playground/ResponsePreview.svelte";
+	import { Copy, Share2, Sparkles } from '@lucide/svelte';
+	import { PUBLIC_API_BASE_URL } from '$env/static/public';
+	import PlaygroundRequestPanel from '$lib/components/playground/PlaygroundRequestPanel.svelte';
+	import ResponsePreview from '$lib/components/playground/ResponsePreview.svelte';
 	import {
 		runPlaygroundRequest,
 		normalizePlaygroundRequest,
-		type PlaygroundEndpoint,
-	} from "$lib/playground/api";
-	import { Button } from "$lib/components/ui/button";
-	import Seo from "$lib/seo/Seo.svelte";
+		type PlaygroundEndpoint
+	} from '$lib/playground/api';
+	import { Button } from '$lib/components/ui/button';
+	import Seo from '$lib/seo/Seo.svelte';
 
 	const endpointOptions = [
-		{ value: "random", label: "GET /proverbs/random" },
-		{ value: "search", label: "GET /proverbs/search" },
-		{ value: "list", label: "GET /proverbs" },
-		{ value: "by-id", label: "GET /proverbs/{id}" },
+		{ value: 'random', label: 'GET /proverbs/random' },
+		{ value: 'search', label: 'GET /proverbs/search' },
+		{ value: 'list', label: 'GET /proverbs' },
+		{ value: 'by-id', label: 'GET /proverbs/{id}' }
 	] as const;
 
 	const apiKeyOptions = [
-		{ value: "production", label: "Production" },
-		{ value: "staging", label: "Staging" },
-		{ value: "internal-tools", label: "Internal Tools" },
+		{ value: 'production', label: 'Production' },
+		{ value: 'staging', label: 'Staging' },
+		{ value: 'internal-tools', label: 'Internal Tools' }
 	] as const;
 
-	type EndpointValue = (typeof endpointOptions)[number]["value"];
-	type ApiKeyValue = (typeof apiKeyOptions)[number]["value"];
+	type EndpointValue = (typeof endpointOptions)[number]['value'];
+	type ApiKeyValue = (typeof apiKeyOptions)[number]['value'];
 
 	let selectedEndpoint = $state<EndpointValue>(endpointOptions[0].value);
 	let selectedApiKey = $state<ApiKeyValue>(apiKeyOptions[0].value);
 	let limit = $state(1);
 	let page = $state(1);
-	let searchQuery = $state("wisdom");
-	let proverbId = $state("1");
-	let apiKey = $state("");
+	let searchQuery = $state('wisdom');
+	let proverbId = $state('1');
+	let apiKey = $state('');
 	let response = $state<unknown | null>(null);
 	let lastStatus = $state<number | null>(null);
 	let lastLatency = $state<number | null>(null);
 	let errorMessage = $state<string | null>(null);
 	let isLoading = $state(false);
-	const API_BASE_URL = (PUBLIC_API_BASE_URL || "http://localhost:3000").replace(
-		/\/$/,
-		"",
-	);
+	const API_BASE_URL = (PUBLIC_API_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
 
 	const latencyLabel = $derived(`${18 + limit * 3}ms`);
-	const showQuery = $derived(selectedEndpoint === "search");
-	const showId = $derived(selectedEndpoint === "by-id");
-	const showPage = $derived(selectedEndpoint === "list");
+	const showQuery = $derived(selectedEndpoint === 'search');
+	const showId = $derived(selectedEndpoint === 'by-id');
+	const showPage = $derived(selectedEndpoint === 'list');
 
 	const responseJson = $derived.by(() => {
 		if (errorMessage) {
-			return JSON.stringify(
-				{ status: "error", message: errorMessage, code: lastStatus },
-				null,
-				2,
-			);
+			return JSON.stringify({ status: 'error', message: errorMessage, code: lastStatus }, null, 2);
 		}
 
 		if (!response) {
-			return JSON.stringify({ status: "idle", message: "No response yet." }, null, 2);
+			return JSON.stringify({ status: 'idle', message: 'No response yet.' }, null, 2);
 		}
 
 		return JSON.stringify(response, null, 2);
 	});
 
 	const visualProverb = $derived.by(() => {
-		if (!response || typeof response !== "object") {
+		if (!response || typeof response !== 'object') {
 			return null;
 		}
 
@@ -84,35 +77,35 @@
 
 	const visualText = $derived.by(() => {
 		if (!visualProverb) {
-			return "Run a request to preview a proverb.";
+			return 'Run a request to preview a proverb.';
 		}
 
 		return (
 			(visualProverb.text as string | undefined) ||
 			(visualProverb.english as string | undefined) ||
-			"No text available."
+			'No text available.'
 		);
 	});
 
 	const visualSubtitle = $derived.by(() => {
 		if (!visualProverb) {
-			return "Waiting for the API response.";
+			return 'Waiting for the API response.';
 		}
 
-		return "Preview of the latest response data.";
+		return 'Preview of the latest response data.';
 	});
 
 	async function runRequest(event?: Event) {
 		event?.preventDefault();
 
-		if (selectedEndpoint === "search" && !searchQuery.trim()) {
-			errorMessage = "Search requires a query.";
+		if (selectedEndpoint === 'search' && !searchQuery.trim()) {
+			errorMessage = 'Search requires a query.';
 			response = null;
 			return;
 		}
 
-		if (selectedEndpoint === "by-id" && !proverbId.trim()) {
-			errorMessage = "Provide a proverb ID to fetch.";
+		if (selectedEndpoint === 'by-id' && !proverbId.trim()) {
+			errorMessage = 'Provide a proverb ID to fetch.';
 			response = null;
 			return;
 		}
@@ -127,7 +120,7 @@
 				page,
 				query: searchQuery,
 				id: proverbId,
-				apiKey,
+				apiKey
 			});
 
 			const result = await runPlaygroundRequest(fetch, API_BASE_URL, payload);
@@ -136,8 +129,7 @@
 			response = result.data;
 			errorMessage = result.error ?? null;
 		} catch (error) {
-			errorMessage =
-				error instanceof Error ? error.message : "Network request failed.";
+			errorMessage = error instanceof Error ? error.message : 'Network request failed.';
 			response = null;
 		} finally {
 			isLoading = false;
@@ -151,8 +143,8 @@
 	async function shareResponse() {
 		if (navigator.share) {
 			await navigator.share({
-				title: "Abbabal API Response",
-				text: responseJson,
+				title: 'Abbabal API Response',
+				text: responseJson
 			});
 			return;
 		}
@@ -160,7 +152,6 @@
 		await copyResponse();
 	}
 </script>
-
 
 <Seo
 	title="API Playground — Try the Abbabal Proverbs API"
@@ -177,12 +168,12 @@
 				<span class="text-xs text-primary">*</span>
 				<span class="h-px w-8 bg-primary"></span>
 			</div>
-			<p class="text-muted-foreground mb-4 font-serif text-2xl italic">
+			<p class="mb-4 font-serif text-2xl text-muted-foreground italic">
 				Design, send, and preview Abbabal requests.
 			</p>
-			<p class="text-muted-foreground leading-7">
-				Tune parameters, inspect responses, and share sample payloads in a
-				focused workspace. Everything here mirrors the production API.
+			<p class="leading-7 text-muted-foreground">
+				Tune parameters, inspect responses, and share sample payloads in a focused workspace.
+				Everything here mirrors the production API.
 			</p>
 			<div class="mt-8 flex flex-wrap gap-3">
 				<Button size="lg" onclick={() => runRequest()} disabled={isLoading}>
@@ -196,85 +187,91 @@
 	</section>
 
 	<section class="grid gap-8 lg:grid-cols-[360px_1fr]">
-			<PlaygroundRequestPanel
-				endpointOptions={endpointOptions}
-				apiKeyOptions={apiKeyOptions}
-				bind:selectedEndpoint
-				bind:selectedApiKey
-				bind:limit
-				bind:apiKey
-				bind:query={searchQuery}
-				bind:id={proverbId}
-				bind:page
-				showQuery={showQuery}
-				showId={showId}
-				showPage={showPage}
-				latencyLabel={latencyLabel}
-				isLoading={isLoading}
-				onSubmit={runRequest}
-			/>
+		<PlaygroundRequestPanel
+			{endpointOptions}
+			{apiKeyOptions}
+			bind:selectedEndpoint
+			bind:selectedApiKey
+			bind:limit
+			bind:apiKey
+			bind:query={searchQuery}
+			bind:id={proverbId}
+			bind:page
+			{showQuery}
+			{showId}
+			{showPage}
+			{latencyLabel}
+			{isLoading}
+			onSubmit={runRequest}
+		/>
 
-			<ResponsePreview
-				class="bg-card/80 text-card-foreground rounded-3xl border border-border p-6 shadow-sm backdrop-blur"
-				actionsPlacement="header"
-				listClass="bg-muted/60 flex w-fit items-center gap-2 rounded-full p-1"
-				tabsHeaderClass="flex items-center justify-start"
-			>
-				{#snippet header()}
-					<div>
-						<p class="text-muted-foreground text-xs uppercase tracking-[0.3em]">
-							Response preview
-						</p>
-						<h2 class="text-2xl font-semibold">Inspect the output</h2>
-					</div>
-				{/snippet}
-				{#snippet actions()}
-					<Button variant="ghost" size="icon-sm" aria-label="Copy response" onclick={copyResponse}>
-						<Copy />
-					</Button>
-					<Button variant="ghost" size="icon-sm" aria-label="Share response" onclick={shareResponse}>
-						<Share2 />
-					</Button>
-				{/snippet}
-				{#snippet visual()}
-					<div class="rounded-3xl border border-border bg-background/80 p-8 shadow-sm">
-						<div class="grid gap-6">
-							<div class="flex items-center justify-between">
-								<div class="flex items-center gap-3">
-									<span class="bg-primary/10 text-primary inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
-										{lastStatus ? `Status ${lastStatus}` : "Waiting"}
-									</span>
-								</div>
-								<span class="text-muted-foreground text-xs">
-									{lastLatency ? `${lastLatency}ms` : "Latency pending"}
+		<ResponsePreview
+			class="rounded-3xl border border-border bg-card/80 p-6 text-card-foreground shadow-sm backdrop-blur"
+			actionsPlacement="header"
+			listClass="bg-muted/60 flex w-fit items-center gap-2 rounded-full p-1"
+			tabsHeaderClass="flex items-center justify-start"
+		>
+			{#snippet header()}
+				<div>
+					<p class="text-xs tracking-[0.3em] text-muted-foreground uppercase">Response preview</p>
+					<h2 class="text-2xl font-semibold">Inspect the output</h2>
+				</div>
+			{/snippet}
+			{#snippet actions()}
+				<Button variant="ghost" size="icon-sm" aria-label="Copy response" onclick={copyResponse}>
+					<Copy />
+				</Button>
+				<Button variant="ghost" size="icon-sm" aria-label="Share response" onclick={shareResponse}>
+					<Share2 />
+				</Button>
+			{/snippet}
+			{#snippet visual()}
+				<div class="rounded-3xl border border-border bg-background/80 p-8 shadow-sm">
+					<div class="grid gap-6">
+						<div class="flex items-center justify-between">
+							<div class="flex items-center gap-3">
+								<span
+									class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold tracking-[0.2em] text-primary uppercase"
+								>
+									{lastStatus ? `Status ${lastStatus}` : 'Waiting'}
 								</span>
 							</div>
+							<span class="text-xs text-muted-foreground">
+								{lastLatency ? `${lastLatency}ms` : 'Latency pending'}
+							</span>
+						</div>
 
-							<div class="space-y-4 text-center">
-								<h3 class="font-display text-3xl md:text-4xl">
-									{visualText}
-								</h3>
-								<p class="text-muted-foreground text-base">
-									{visualSubtitle}
-								</p>
-							</div>
+						<div class="space-y-4 text-center">
+							<h3 class="font-display text-3xl md:text-4xl">
+								{visualText}
+							</h3>
+							<p class="text-base text-muted-foreground">
+								{visualSubtitle}
+							</p>
+						</div>
 
-							<div class="flex flex-wrap items-center justify-center gap-3">
-								<span class="bg-secondary/20 text-secondary inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-									Endpoint: {selectedEndpoint}
-								</span>
-								<span class="bg-muted text-foreground inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-									Environment: {selectedApiKey}
-								</span>
-							</div>
+						<div class="flex flex-wrap items-center justify-center gap-3">
+							<span
+								class="inline-flex items-center rounded-full bg-secondary/20 px-3 py-1 text-xs font-semibold tracking-wide text-secondary uppercase"
+							>
+								Endpoint: {selectedEndpoint}
+							</span>
+							<span
+								class="inline-flex items-center rounded-full bg-muted px-3 py-1 text-xs font-semibold tracking-wide text-foreground uppercase"
+							>
+								Environment: {selectedApiKey}
+							</span>
 						</div>
 					</div>
-				{/snippet}
-				{#snippet json()}
-					<div class="rounded-3xl border border-border bg-background/90 p-6 font-mono text-sm shadow-sm">
-						<pre class="text-muted-foreground leading-6">{responseJson}</pre>
-					</div>
-				{/snippet}
-			</ResponsePreview>
-		</section>
-	</div>
+				</div>
+			{/snippet}
+			{#snippet json()}
+				<div
+					class="rounded-3xl border border-border bg-background/90 p-6 font-mono text-sm shadow-sm"
+				>
+					<pre class="leading-6 text-muted-foreground">{responseJson}</pre>
+				</div>
+			{/snippet}
+		</ResponsePreview>
+	</section>
+</div>

@@ -143,7 +143,8 @@
 
 				<footer class="mt-4 flex items-center justify-between gap-3">
 					<span class="text-[11px] text-muted-foreground">
-						<time datetime={msg.date}>{timeLabel(msg.date)}</time> <!-- @wc-ignore -->UTC
+						<time datetime={msg.date}>{timeLabel(msg.date)}</time>
+						<!-- @wc-ignore -->UTC
 					</span>
 					<a
 						href={storyPostUrl(msg.id)}

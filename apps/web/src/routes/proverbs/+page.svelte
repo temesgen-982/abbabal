@@ -1,357 +1,437 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import { resolve } from '$app/paths';
-  import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, List, Grid, Bookmark, Volume2, Shuffle, LoaderCircle } from '@lucide/svelte';
-  import { onMount } from 'svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Tooltip from '$lib/components/ui/tooltip';
-  import Seo from '$lib/seo/Seo.svelte';
-  import { getSiteUrl } from '$lib/seo/site.js';
-  import { localize } from '$lib/i18n.js';
-  import { getSavedState } from '$lib/stores/saved.svelte';
-  import type { PageData } from './$types';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import {
+		ChevronLeft,
+		ChevronRight,
+		Search,
+		SlidersHorizontal,
+		List,
+		Grid,
+		Bookmark,
+		Volume2,
+		LoaderCircle
+	} from '@lucide/svelte';
+	import { onMount } from 'svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import Seo from '$lib/seo/Seo.svelte';
+	import { getSiteUrl } from '$lib/seo/site.js';
+	import { localize } from '$lib/i18n.js';
+	import { getSavedState } from '$lib/stores/saved.svelte';
+	import type { PageData } from './$types';
 
-  let { data }: { data: PageData } = $props();
+	let { data }: { data: PageData } = $props();
 
-  const saved = getSavedState();
+	const saved = getSavedState();
 
-  let searchInput = $state(data.searchQuery);
-  let showFilters = $state(false);
-  let viewMode = $state<'list' | 'grid'>('list');
+	let searchInput = $state(data.searchQuery);
+	let showFilters = $state(false);
+	let viewMode = $state<'list' | 'grid'>('list');
 
-  // Submitting runs a full-page GET navigation, so show immediate feedback
-  // instead of leaving the field looking inert while the results load. Reset on
-  // `pageshow` in case the browser restores the page from its back/forward cache.
-  let searching = $state(false);
+	// Submitting runs a full-page GET navigation, so show immediate feedback
+	// instead of leaving the field looking inert while the results load. Reset on
+	// `pageshow` in case the browser restores the page from its back/forward cache.
+	let searching = $state(false);
 
-  onMount(() => {
-    const reset = () => (searching = false);
-    window.addEventListener('pageshow', reset);
-    return () => window.removeEventListener('pageshow', reset);
-  });
+	onMount(() => {
+		const reset = () => (searching = false);
+		window.addEventListener('pageshow', reset);
+		return () => window.removeEventListener('pageshow', reset);
+	});
 
-  const totalPages = $derived(Math.max(1, Math.ceil(data.total / data.limit)));
-  const isSearch = $derived(Boolean(data.searchQuery));
+	const totalPages = $derived(Math.max(1, Math.ceil(data.total / data.limit)));
+	const isSearch = $derived(Boolean(data.searchQuery));
 
-  // wuchale localizes URL *literals* at build time, but nothing it can see:
-  // values built at runtime (query strings, `goto` arguments, form actions)
-  // have to be localized here. `localize` is idempotent, so it's safe even
-  // where the extractor did catch the literal.
-  const locale = $derived(data.locale);
+	// wuchale localizes URL *literals* at build time, but nothing it can see:
+	// values built at runtime (query strings, `goto` arguments, form actions)
+	// have to be localized here. `localize` is idempotent, so it's safe even
+	// where the extractor did catch the literal.
+	const locale = $derived(data.locale);
 
-  function pageHref(p: number): '/proverbs' | `/proverbs?page=${number}` {
-    const clamped = Math.min(Math.max(p, 1), totalPages);
-    return clamped === 1 ? '/proverbs' : `/proverbs?page=${clamped}`;
-  }
+	function pageHref(p: number): '/proverbs' | `/proverbs?page=${number}` {
+		const clamped = Math.min(Math.max(p, 1), totalPages);
+		return clamped === 1 ? '/proverbs' : `/proverbs?page=${clamped}`;
+	}
 
-  const seoPath = $derived(
-    isSearch ? '/proverbs' : data.page > 1 ? `/proverbs?page=${data.page}` : '/proverbs'
-  );
+	const seoPath = $derived(
+		isSearch ? '/proverbs' : data.page > 1 ? `/proverbs?page=${data.page}` : '/proverbs'
+	);
 
-  const seoTitle = $derived(
-    isSearch
-      ? `${data.searchQuery} — Amharic Proverbs | Abbabal`
-      : `Amharic Proverbs — Browse ${data.total.toLocaleString()} with Meanings | Abbabal`
-  );
+	const seoTitle = $derived(
+		isSearch
+			? `${data.searchQuery} — Amharic Proverbs | Abbabal`
+			: `Amharic Proverbs — Browse ${data.total.toLocaleString()} with Meanings | Abbabal`
+	);
 
-  const seoDescription = $derived(
-    isSearch
-      ? `Search results for “${data.searchQuery}” in the Abbabal archive of Amharic proverbs (አባባሎች) with translations and meanings.`
-      : `Browse and search ${data.total.toLocaleString()}+ Amharic proverbs (አባባሎች). Each proverb includes English translations, explanations, and cultural context from the open Abbabal archive.`
-  );
+	const seoDescription = $derived(
+		isSearch
+			? `Search results for “${data.searchQuery}” in the Abbabal archive of Amharic proverbs (አባባሎች) with translations and meanings.`
+			: `Browse and search ${data.total.toLocaleString()}+ Amharic proverbs (አባባሎች). Each proverb includes English translations, explanations, and cultural context from the open Abbabal archive.`
+	);
 
-  const collectionJsonLd = $derived({
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: 'Amharic Proverbs',
-    alternateName: 'የአማርኛ አባባሎች',
-    url: `${getSiteUrl()}${localize('/proverbs', locale)}`,
-    description: seoDescription,
-    inLanguage: ['en', 'am'],
-    mainEntity: {
-      '@type': 'ItemList',
-      numberOfItems: data.total,
-      itemListElement: data.proverbs.map((proverb: { id: number; text: string }, i: number) => ({
-        '@type': 'ListItem',
-        position: (data.page - 1) * data.limit + i + 1,
-        url: `${getSiteUrl()}${localize(`/proverbs/${proverb.id}`, locale)}`,
-        name: proverb.text
-      }))
-    }
-  });
+	const collectionJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'CollectionPage',
+		name: 'Amharic Proverbs',
+		alternateName: 'የአማርኛ አባባሎች',
+		url: `${getSiteUrl()}${localize('/proverbs', locale)}`,
+		description: seoDescription,
+		inLanguage: ['en', 'am'],
+		mainEntity: {
+			'@type': 'ItemList',
+			numberOfItems: data.total,
+			itemListElement: data.proverbs.map((proverb: { id: number; text: string }, i: number) => ({
+				'@type': 'ListItem',
+				position: (data.page - 1) * data.limit + i + 1,
+				url: `${getSiteUrl()}${localize(`/proverbs/${proverb.id}`, locale)}`,
+				name: proverb.text
+			}))
+		}
+	});
 
-  function goToRandom() {
-    const id = Math.floor(Math.random() * (data.proverbCount ?? 7576)) + 1;
-    goto(localize(`/proverbs/${id}`, locale));
-  }
+	function clearFilters() {
+		goto(localize('/proverbs', locale));
+	}
 
-  function clearFilters() {
-    goto(localize('/proverbs', locale));
-  }
+	const pageNumbers = $derived.by(() => {
+		const pages: (number | '...')[] = [];
+		const current = data.page;
+		const total = totalPages;
 
-  const pageNumbers = $derived.by(() => {
-    const pages: (number | '...')[] = [];
-    const current = data.page;
-    const total = totalPages;
+		if (total <= 7) {
+			for (let i = 1; i <= total; i++) pages.push(i);
+		} else {
+			pages.push(1);
+			if (current > 3) pages.push('...');
+			for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+				pages.push(i);
+			}
+			if (current < total - 2) pages.push('...');
+			pages.push(total);
+		}
+		return pages;
+	});
 
-    if (total <= 7) {
-      for (let i = 1; i <= total; i++) pages.push(i);
-    } else {
-      pages.push(1);
-      if (current > 3) pages.push('...');
-      for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
-        pages.push(i);
-      }
-      if (current < total - 2) pages.push('...');
-      pages.push(total);
-    }
-    return pages;
-  });
-
-  const startResult = $derived((data.page - 1) * data.limit + 1);
-  const endResult = $derived(Math.min(data.page * data.limit, data.total));
+	const startResult = $derived((data.page - 1) * data.limit + 1);
+	const endResult = $derived(Math.min(data.page * data.limit, data.total));
 </script>
 
 <Seo
-  title={seoTitle}
-  description={seoDescription}
-  path={seoPath}
-  noindex={isSearch}
-  jsonLd={collectionJsonLd}
+	title={seoTitle}
+	description={seoDescription}
+	path={seoPath}
+	noindex={isSearch}
+	jsonLd={collectionJsonLd}
 />
 
 <div class="mx-auto max-w-7xl px-6">
-  <!-- Header -->
-  <div class="py-8">
-    <div class="flex items-center gap-3">
-      <div class="h-7 w-1 rounded-full bg-primary"></div>
-      <div>
-        <h1 class="text-3xl font-extrabold tracking-tight">Proverbs</h1>
-        <p class="mt-0.5 text-sm text-muted-foreground">Explore thousands of Amharic proverbs.</p>
-      </div>
-    </div>
-  </div>
+	<!-- Header -->
+	<div class="py-8">
+		<div class="flex items-center gap-3">
+			<div class="h-7 w-1 rounded-full bg-primary"></div>
+			<div>
+				<h1 class="text-3xl font-extrabold tracking-tight">Proverbs</h1>
+				<p class="mt-0.5 text-sm text-muted-foreground">Explore thousands of Amharic proverbs.</p>
+			</div>
+		</div>
+	</div>
 
-  <!-- Search + Controls Row -->
-  <div class="mb-6 grid items-center gap-4 md:grid-cols-[1fr_auto]">
-    <form
-      action={localize('/proverbs', locale)}
-      method="get"
-      onsubmit={() => (searching = true)}
-      class="flex items-center rounded-xl border border-border bg-card py-1.5 pr-1.5 pl-4 shadow-sm"
-    >
-      <Search size={16} class="mr-3 shrink-0 text-muted-foreground" />
-      <input
-        type="text"
-        name="search"
-        value={searchInput}
-        placeholder="Search Amharic or English..."
-        class="w-full bg-transparent py-1.5 text-sm outline-none placeholder:text-muted-foreground/60"
-      />
-      <button
-        type="submit"
-        disabled={searching}
-        aria-busy={searching}
-        class="flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-2 text-xs font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none active:scale-95 disabled:cursor-progress disabled:opacity-80 sm:px-4"
-      >
-        {#if searching}
-          <LoaderCircle size={16} class="animate-spin" />
-        {:else}
-          <Search size={16} />
-        {/if}
-        <span class="sr-only sm:not-sr-only">Search</span>
-      </button>
-    </form>
+	<!-- Search + Controls Row -->
+	<div class="mb-6 grid items-center gap-4 md:grid-cols-[1fr_auto]">
+		<form
+			action={localize('/proverbs', locale)}
+			method="get"
+			onsubmit={() => (searching = true)}
+			class="flex items-center rounded-xl border border-border bg-card py-1.5 pr-1.5 pl-4 shadow-sm"
+		>
+			<Search size={16} class="mr-3 shrink-0 text-muted-foreground" />
+			<input
+				type="text"
+				name="search"
+				value={searchInput}
+				placeholder="Search Amharic or English..."
+				class="w-full bg-transparent py-1.5 text-sm outline-none placeholder:text-muted-foreground/60"
+			/>
+			<button
+				type="submit"
+				disabled={searching}
+				aria-busy={searching}
+				class="flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-2 text-xs font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none active:scale-95 disabled:cursor-progress disabled:opacity-80 sm:px-4"
+			>
+				{#if searching}
+					<LoaderCircle size={16} class="animate-spin" />
+				{:else}
+					<Search size={16} />
+				{/if}
+				<span class="sr-only sm:not-sr-only">Search</span>
+			</button>
+		</form>
 
-    <div class="flex items-center gap-3">
-      <div class="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 shadow-sm">
-        <label class="text-xs text-muted-foreground">Sort by</label>
-        <select class="border-none bg-transparent text-xs font-semibold outline-none">
-          <option>Most Recent</option>
-          <option>Alphabetical</option>
-        </select>
-      </div>
-      <div class="flex rounded-xl bg-secondary p-1">
-        <button onclick={() => viewMode = 'list'} class="rounded-lg p-2 {viewMode === 'list' ? 'bg-card text-primary shadow-sm' : 'text-muted-foreground'}" aria-label="List view">
-          <List size={16} />
-        </button>
-        <button onclick={() => viewMode = 'grid'} class="rounded-lg p-2 {viewMode === 'grid' ? 'bg-card text-primary shadow-sm' : 'text-muted-foreground'}" aria-label="Grid view">
-          <Grid size={16} />
-        </button>
-      </div>
-    </div>
-  </div>
+		<div class="flex items-center gap-3">
+			<div
+				class="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 shadow-sm"
+			>
+				<label class="text-xs text-muted-foreground">Sort by</label>
+				<select class="border-none bg-transparent text-xs font-semibold outline-none">
+					<option>Most Recent</option>
+					<option>Alphabetical</option>
+				</select>
+			</div>
+			<div class="flex rounded-xl bg-secondary p-1">
+				<button
+					onclick={() => (viewMode = 'list')}
+					class="rounded-lg p-2 {viewMode === 'list'
+						? 'bg-card text-primary shadow-sm'
+						: 'text-muted-foreground'}"
+					aria-label="List view"
+				>
+					<List size={16} />
+				</button>
+				<button
+					onclick={() => (viewMode = 'grid')}
+					class="rounded-lg p-2 {viewMode === 'grid'
+						? 'bg-card text-primary shadow-sm'
+						: 'text-muted-foreground'}"
+					aria-label="Grid view"
+				>
+					<Grid size={16} />
+				</button>
+			</div>
+		</div>
+	</div>
 
-  <!-- Main Layout -->
-  <div class="grid gap-8 pb-16 md:grid-cols-[260px_1fr]">
-    <!-- Sidebar Filters -->
-    <aside class="hidden md:block">
-      <div class="rounded-2xl border border-border bg-secondary p-6">
-        <div class="mb-5 flex items-center justify-between">
-          <h3 class="text-sm font-bold">Filters</h3>
-          <button onclick={clearFilters} class="text-xs font-semibold text-primary">Clear all</button>
-        </div>
+	<!-- Main Layout -->
+	<div class="grid gap-8 pb-16 md:grid-cols-[260px_1fr]">
+		<!-- Sidebar Filters -->
+		<aside class="hidden md:block">
+			<div class="rounded-2xl border border-border bg-secondary p-6">
+				<div class="mb-5 flex items-center justify-between">
+					<h3 class="text-sm font-bold">Filters</h3>
+					<button onclick={clearFilters} class="text-xs font-semibold text-primary"
+						>Clear all</button
+					>
+				</div>
 
-        <div class="mb-5">
-          <label class="mb-2 block text-xs font-semibold">Search in meaning</label>
-          <div class="relative">
-            <Search size={14} class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input type="text" placeholder="e.g. patience, work..." class="w-full rounded-lg border border-border bg-card py-2 pl-8 pr-3 text-xs outline-none" />
-          </div>
-        </div>
+				<div class="mb-5">
+					<label class="mb-2 block text-xs font-semibold">Search in meaning</label>
+					<div class="relative">
+						<Search
+							size={14}
+							class="absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
+						/>
+						<input
+							type="text"
+							placeholder="e.g. patience, work..."
+							class="w-full rounded-lg border border-border bg-card py-2 pr-3 pl-8 text-xs outline-none"
+						/>
+					</div>
+				</div>
 
-        <div class="mb-5">
-          <label class="mb-2 block text-xs font-semibold">Language</label>
-          <div class="flex flex-col gap-3">
-            {#each ['Amharic', 'English', 'Transliteration'] as lang}
-              <label class="flex items-center gap-2 text-xs">
-                <input type="checkbox" checked={lang === 'Amharic' || lang === 'English'} class="accent-primary h-4 w-4" />
-                {lang}
-              </label>
-            {/each}
-          </div>
-        </div>
+				<div class="mb-5">
+					<label class="mb-2 block text-xs font-semibold">Language</label>
+					<div class="flex flex-col gap-3">
+						{#each ['Amharic', 'English', 'Transliteration'] as lang (lang)}
+							<label class="flex items-center gap-2 text-xs">
+								<input
+									type="checkbox"
+									checked={lang === 'Amharic' || lang === 'English'}
+									class="h-4 w-4 accent-primary"
+								/>
+								{lang}
+							</label>
+						{/each}
+					</div>
+				</div>
 
-        <div class="mb-5">
-          <label class="mb-2 block text-xs font-semibold">Length</label>
-          <select class="w-full rounded-lg border border-border bg-card px-3 py-2 text-xs outline-none">
-            <option>Any length</option>
-            <option>Short (&lt; 5 words)</option>
-            <option>Medium (5-10 words)</option>
-            <option>Long (&gt; 10 words)</option>
-          </select>
-        </div>
+				<div class="mb-5">
+					<label class="mb-2 block text-xs font-semibold">Length</label>
+					<select
+						class="w-full rounded-lg border border-border bg-card px-3 py-2 text-xs outline-none"
+					>
+						<option>Any length</option>
+						<option>Short (&lt; 5 words)</option>
+						<option>Medium (5-10 words)</option>
+						<option>Long (&gt; 10 words)</option>
+					</select>
+				</div>
 
-        <div class="mb-5">
-          <label class="mb-2 block text-xs font-semibold">Added</label>
-          <select class="w-full rounded-lg border border-border bg-card px-3 py-2 text-xs outline-none">
-            <option>Anytime</option>
-            <option>Past Week</option>
-            <option>Past Month</option>
-            <option>Past Year</option>
-          </select>
-        </div>
+				<div class="mb-5">
+					<label class="mb-2 block text-xs font-semibold">Added</label>
+					<select
+						class="w-full rounded-lg border border-border bg-card px-3 py-2 text-xs outline-none"
+					>
+						<option>Anytime</option>
+						<option>Past Week</option>
+						<option>Past Month</option>
+						<option>Past Year</option>
+					</select>
+				</div>
 
-        <button class="w-full rounded-lg bg-primary py-2.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
-          Apply Filters
-        </button>
-      </div>
-    </aside>
+				<button
+					class="w-full rounded-lg bg-primary py-2.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+				>
+					Apply Filters
+				</button>
+			</div>
+		</aside>
 
-    <!-- Content -->
-    <div>
-      <!-- Results count + mobile filters -->
-      <div class="mb-4 flex items-center justify-between">
-        <p class="text-xs text-muted-foreground">
-          Showing {startResult}–{endResult} of <strong class="text-foreground">{data.total.toLocaleString()}</strong> proverbs
-        </p>
-        <button onclick={() => showFilters = !showFilters} class="flex items-center gap-1.5 text-xs font-semibold text-primary md:hidden">
-          <SlidersHorizontal size={14} />
-          Filters
-        </button>
-      </div>
+		<!-- Content -->
+		<div>
+			<!-- Results count + mobile filters -->
+			<div class="mb-4 flex items-center justify-between">
+				<p class="text-xs text-muted-foreground">
+					Showing {startResult}–{endResult} of
+					<strong class="text-foreground">{data.total.toLocaleString()}</strong> proverbs
+				</p>
+				<button
+					onclick={() => (showFilters = !showFilters)}
+					class="flex items-center gap-1.5 text-xs font-semibold text-primary md:hidden"
+				>
+					<SlidersHorizontal size={14} />
+					Filters
+				</button>
+			</div>
 
-      <!-- Proverbs List / Grid -->
-      {#if data.proverbs.length === 0}
-        <div class="flex flex-col items-center justify-center rounded-2xl border border-border bg-card py-20">
-          <p class="text-sm font-semibold">No proverbs found</p>
-          <p class="mt-1 text-xs text-muted-foreground">Try adjusting your search or filters.</p>
-          <button onclick={clearFilters} class="mt-4 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground">Clear filters</button>
-        </div>
-      {:else if viewMode === 'list'}
-        <div class="flex flex-col gap-4">
-          {#each data.proverbs as proverb, i}
-            <a href="/proverbs/{proverb.id}" class="block rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
-              <div class="grid items-start gap-4 md:grid-cols-[auto_1fr_auto]">
-                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-muted text-xs font-bold text-muted-foreground">
-                  {(data.page - 1) * data.limit + i + 1}
-                </div>
-                <div>
-                  <p class="font-ethiopic text-lg font-bold leading-relaxed">{proverb.text}</p>
-                  {#if proverb.source}
-                    <span class="mt-2 inline-block rounded-full bg-muted px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                      {proverb.source}
-                    </span>
-                  {/if}
-                </div>
-                <div class="flex items-start gap-2">
-                  <button
-                    onclick={(e) => { e.preventDefault(); e.stopPropagation(); saved.toggle({ id: proverb.id, text: proverb.text, source: proverb.source }); }}
-                    class="flex h-9 w-9 items-center justify-center rounded-full border transition-colors {saved.has(proverb.id) ? 'border-primary bg-primary text-white' : 'border-border bg-background text-muted-foreground hover:border-primary hover:bg-primary hover:text-white'}"
-                    aria-pressed={saved.has(proverb.id)}
-                    aria-label={saved.has(proverb.id) ? 'Remove from saved' : 'Save proverb'}
-                  >
-                    <Bookmark size={14} class={saved.has(proverb.id) ? 'fill-current' : ''} />
-                  </button>
-                  <Tooltip.Root>
-                    <Tooltip.Trigger
-                      onclick={(e) => { e.preventDefault(); }}
-                      class="hidden h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary md:flex"
-                      aria-label="Listen"
-                    >
-                      <Volume2 size={14} />
-                    </Tooltip.Trigger>
-                    <Tooltip.Content side="top">Coming soon</Tooltip.Content>
-                  </Tooltip.Root>
-                </div>
-              </div>
-            </a>
-          {/each}
-        </div>
-      {:else}
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {#each data.proverbs as proverb}
-            <a href="/proverbs/{proverb.id}" class="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
-              <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-[10px] font-bold text-muted-foreground mb-3">
-                #{proverb.id}
-              </div>
-              <p class="font-ethiopic text-sm font-bold leading-relaxed">{proverb.text}</p>
-              {#if proverb.source}
-                <span class="mt-3 inline-block self-start rounded-full bg-muted px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  {proverb.source}
-                </span>
-              {/if}
-            </a>
-          {/each}
-        </div>
-      {/if}
+			<!-- Proverbs List / Grid -->
+			{#if data.proverbs.length === 0}
+				<div
+					class="flex flex-col items-center justify-center rounded-2xl border border-border bg-card py-20"
+				>
+					<p class="text-sm font-semibold">No proverbs found</p>
+					<p class="mt-1 text-xs text-muted-foreground">Try adjusting your search or filters.</p>
+					<button
+						onclick={clearFilters}
+						class="mt-4 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground"
+						>Clear filters</button
+					>
+				</div>
+			{:else if viewMode === 'list'}
+				<div class="flex flex-col gap-4">
+					{#each data.proverbs as proverb, i (proverb.id)}
+						<a
+							href="/proverbs/{proverb.id}"
+							class="block rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
+						>
+							<div class="grid items-start gap-4 md:grid-cols-[auto_1fr_auto]">
+								<div
+									class="flex h-9 w-9 items-center justify-center rounded-lg bg-muted text-xs font-bold text-muted-foreground"
+								>
+									{(data.page - 1) * data.limit + i + 1}
+								</div>
+								<div>
+									<p class="font-ethiopic text-lg leading-relaxed font-bold">{proverb.text}</p>
+									{#if proverb.source}
+										<span
+											class="mt-2 inline-block rounded-full bg-muted px-3 py-0.5 text-[10px] font-semibold tracking-wider text-muted-foreground uppercase"
+										>
+											{proverb.source}
+										</span>
+									{/if}
+								</div>
+								<div class="flex items-start gap-2">
+									<button
+										onclick={(e) => {
+											e.preventDefault();
+											e.stopPropagation();
+											saved.toggle({ id: proverb.id, text: proverb.text, source: proverb.source });
+										}}
+										class="flex h-9 w-9 items-center justify-center rounded-full border transition-colors {saved.has(
+											proverb.id
+										)
+											? 'border-primary bg-primary text-white'
+											: 'border-border bg-background text-muted-foreground hover:border-primary hover:bg-primary hover:text-white'}"
+										aria-pressed={saved.has(proverb.id)}
+										aria-label={saved.has(proverb.id) ? 'Remove from saved' : 'Save proverb'}
+									>
+										<Bookmark size={14} class={saved.has(proverb.id) ? 'fill-current' : ''} />
+									</button>
+									<Tooltip.Root>
+										<Tooltip.Trigger
+											onclick={(e) => {
+												e.preventDefault();
+											}}
+											class="hidden h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-primary hover:bg-primary hover:text-white md:flex"
+											aria-label="Listen"
+										>
+											<Volume2 size={14} />
+										</Tooltip.Trigger>
+										<Tooltip.Content side="top">Coming soon</Tooltip.Content>
+									</Tooltip.Root>
+								</div>
+							</div>
+						</a>
+					{/each}
+				</div>
+			{:else}
+				<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+					{#each data.proverbs as proverb (proverb.id)}
+						<a
+							href="/proverbs/{proverb.id}"
+							class="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
+						>
+							<div
+								class="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-[10px] font-bold text-muted-foreground"
+							>
+								#{proverb.id}
+							</div>
+							<p class="font-ethiopic text-sm leading-relaxed font-bold">{proverb.text}</p>
+							{#if proverb.source}
+								<span
+									class="mt-3 inline-block self-start rounded-full bg-muted px-2.5 py-0.5 text-[10px] font-semibold tracking-wider text-muted-foreground uppercase"
+								>
+									{proverb.source}
+								</span>
+							{/if}
+						</a>
+					{/each}
+				</div>
+			{/if}
 
-      <!-- Pagination -->
-      {#if data.total > data.limit}
-        <nav class="mt-8 flex items-center justify-center gap-2" aria-label="Proverb pages">
-          <a
-            href={localize(resolve(pageHref(data.page - 1)), locale)}
-            aria-disabled={data.page <= 1}
-            class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary {data.page <= 1 ? 'pointer-events-none opacity-40' : ''}"
-          >
-            <ChevronLeft size={14} />
-            Previous
-          </a>
+			<!-- Pagination -->
+			{#if data.total > data.limit}
+				<nav class="mt-8 flex items-center justify-center gap-2" aria-label="Proverb pages">
+					<a
+						href={localize(resolve(pageHref(data.page - 1)), locale)}
+						aria-disabled={data.page <= 1}
+						class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary {data.page <=
+						1
+							? 'pointer-events-none opacity-40'
+							: ''}"
+					>
+						<ChevronLeft size={14} />
+						Previous
+					</a>
 
-          {#each pageNumbers as p}
-            {#if p === '...'}
-              <span class="px-1 text-xs text-muted-foreground">...</span>
-            {:else}
-              <a
-                href={localize(resolve(pageHref(p)), locale)}
-                aria-current={p === data.page ? 'page' : undefined}
-                class="flex h-9 w-9 items-center justify-center rounded-lg text-xs font-semibold transition-colors {p === data.page ? 'bg-primary text-primary-foreground' : 'border border-border bg-card hover:border-primary hover:text-primary'}"
-              >
-                {p}
-              </a>
-            {/if}
-          {/each}
+					{#each pageNumbers as p, i (i)}
+						{#if p === '...'}
+							<span class="px-1 text-xs text-muted-foreground">...</span>
+						{:else}
+							<a
+								href={localize(resolve(pageHref(p)), locale)}
+								aria-current={p === data.page ? 'page' : undefined}
+								class="flex h-9 w-9 items-center justify-center rounded-lg text-xs font-semibold transition-colors {p ===
+								data.page
+									? 'bg-primary text-primary-foreground'
+									: 'border border-border bg-card hover:border-primary hover:text-primary'}"
+							>
+								{p}
+							</a>
+						{/if}
+					{/each}
 
-          <a
-            href={localize(resolve(pageHref(data.page + 1)), locale)}
-            aria-disabled={data.page >= totalPages}
-            class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary {data.page >= totalPages ? 'pointer-events-none opacity-40' : ''}"
-          >
-            Next
-            <ChevronRight size={14} />
-          </a>
-        </nav>
-      {/if}
-    </div>
-  </div>
+					<a
+						href={localize(resolve(pageHref(data.page + 1)), locale)}
+						aria-disabled={data.page >= totalPages}
+						class="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-semibold transition-colors hover:border-primary hover:text-primary {data.page >=
+						totalPages
+							? 'pointer-events-none opacity-40'
+							: ''}"
+					>
+						Next
+						<ChevronRight size={14} />
+					</a>
+				</nav>
+			{/if}
+		</div>
+	</div>
 </div>

@@ -38,9 +38,9 @@
 		jsonLd === undefined
 			? ''
 			: '<script type="application/ld+json">' +
-				JSON.stringify(jsonLd).replace(/</g, '\\u003c') +
-				'</scr' +
-				'ipt>'
+					JSON.stringify(jsonLd).replace(/</g, '\\u003c') +
+					'</scr' +
+					'ipt>'
 	);
 </script>
 
@@ -50,10 +50,14 @@
 	<link rel="canonical" href={canonical} />
 	<!-- Path-based locales make each page exist twice; tell search engines they
 	     are the same content rather than competing duplicates. -->
-	{#each locales as l}
+	{#each locales as l (l)}
 		<link rel="alternate" hreflang={l} href={`${siteUrl}${localize(rawPath, l)}`} />
 	{/each}
-	<link rel="alternate" hreflang="x-default" href={`${siteUrl}${localize(rawPath, sourceLocale)}`} />
+	<link
+		rel="alternate"
+		hreflang="x-default"
+		href={`${siteUrl}${localize(rawPath, sourceLocale)}`}
+	/>
 	{#if noindex}
 		<meta name="robots" content="noindex,follow" />
 	{/if}

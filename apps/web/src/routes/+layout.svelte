@@ -26,4 +26,4 @@
 
 {@render children()}
 
-<Footer locale={data.locale} />
+<Footer />

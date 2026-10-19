@@ -1,13 +1,5 @@
 <script lang="ts">
-	import {
-		BookOpen,
-		Download,
-		Leaf,
-		ArrowRight,
-		ArrowDown,
-		ArrowUpRight,
-		Send
-	} from '@lucide/svelte';
+	import { BookOpen, Download, Leaf, ArrowRight, ArrowUpRight, Send } from '@lucide/svelte';
 	import DataSource from '$lib/components/DataSource.svelte';
 	import StoryTimeline from '$lib/components/StoryTimeline.svelte';
 	import Seo from '$lib/seo/Seo.svelte';

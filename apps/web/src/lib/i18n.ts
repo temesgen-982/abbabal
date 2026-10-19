@@ -38,6 +38,9 @@ export function localeFromPathname(pathname: string): Locale {
 export function switchLocaleUrl(pathname: string, target: Locale, search = ''): string {
 	const [path, from] = deLocalizeDefault(pathname, locales);
 	const { path: matched, params, altPatterns } = matchUrl(path, from);
-	const next = matched === null ? localize(path, target) : localize(stringifyPattern(altPatterns[target], params), target);
+	const next =
+		matched === null
+			? localize(path, target)
+			: localize(stringifyPattern(altPatterns[target], params), target);
 	return next + search;
 }

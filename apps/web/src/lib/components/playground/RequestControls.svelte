@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { cn } from "$lib/utils.js";
-	import * as Select from "$lib/components/ui/select/index.js";
+	import { cn } from '$lib/utils.js';
+	import * as Select from '$lib/components/ui/select/index.js';
 
 	type Option = {
 		value: string;
@@ -11,21 +11,19 @@
 		class: className,
 		endpointOptions,
 		apiKeyOptions,
-		endpointLabel = "Endpoint",
-		apiKeyLabel = "API key",
-		limitLabel = "Limit",
+		endpointLabel = 'Endpoint',
+		apiKeyLabel = 'API key',
+		limitLabel = 'Limit',
 		selectedEndpoint = $bindable(),
 		selectedApiKey = $bindable(),
 		limit = $bindable(1),
-		labelClass = "grid gap-2 text-sm font-medium",
-		triggerClass = "w-full",
-		limitWrapperClass = "grid gap-2 text-sm font-medium",
-		limitLabelClass = "text-sm font-medium",
-		limitValueClass =
-			"bg-muted text-foreground inline-flex h-7 w-10 items-center justify-center rounded-full text-xs",
-		rangeClass =
-			"h-1.5 w-full cursor-pointer appearance-none rounded-full bg-primary/20 accent-primary",
-		limitLayout = "stacked",
+		labelClass = 'grid gap-2 text-sm font-medium',
+		triggerClass = 'w-full',
+		limitWrapperClass = 'grid gap-2 text-sm font-medium',
+		limitLabelClass = 'text-sm font-medium',
+		limitValueClass = 'bg-muted text-foreground inline-flex h-7 w-10 items-center justify-center rounded-full text-xs',
+		rangeClass = 'h-1.5 w-full cursor-pointer appearance-none rounded-full bg-primary/20 accent-primary',
+		limitLayout = 'stacked'
 	}: {
 		class?: string;
 		endpointOptions: Option[];
@@ -33,8 +31,8 @@
 		endpointLabel?: string;
 		apiKeyLabel?: string;
 		limitLabel?: string;
-		selectedEndpoint: Option["value"];
-		selectedApiKey: Option["value"];
+		selectedEndpoint: Option['value'];
+		selectedApiKey: Option['value'];
 		limit: number;
 		labelClass?: string;
 		triggerClass?: string;
@@ -42,22 +40,22 @@
 		limitLabelClass?: string;
 		limitValueClass?: string;
 		rangeClass?: string;
-		limitLayout?: "stacked" | "inline";
+		limitLayout?: 'stacked' | 'inline';
 	} = $props();
 
 	const selectedEndpointLabel = $derived(
 		endpointOptions.find((option) => option.value === selectedEndpoint)?.label ??
 			endpointOptions[0]?.label ??
-			"",
+			''
 	);
 	const selectedApiKeyLabel = $derived(
 		apiKeyOptions.find((option) => option.value === selectedApiKey)?.label ??
 			apiKeyOptions[0]?.label ??
-			"",
+			''
 	);
 </script>
 
-<div class={cn("grid gap-6", className)}>
+<div class={cn('grid gap-6', className)}>
 	<label class={labelClass}>
 		{endpointLabel}
 		<Select.Root type="single" bind:value={selectedEndpoint}>
@@ -83,16 +81,10 @@
 	</label>
 
 	<div class={limitWrapperClass}>
-		{#if limitLayout === "inline"}
+		{#if limitLayout === 'inline'}
 			<span class={limitLabelClass}>{limitLabel}</span>
 			<div class="flex items-center gap-4">
-				<input
-					class={rangeClass}
-					type="range"
-					min="1"
-					max="10"
-					bind:value={limit}
-				/>
+				<input class={rangeClass} type="range" min="1" max="10" bind:value={limit} />
 				<span class={limitValueClass}>{limit}</span>
 			</div>
 		{:else}
@@ -100,13 +92,7 @@
 				<span class={limitLabelClass}>{limitLabel}</span>
 				<span class={limitValueClass}>{limit}</span>
 			</div>
-			<input
-				class={rangeClass}
-				type="range"
-				min="1"
-				max="10"
-				bind:value={limit}
-			/>
+			<input class={rangeClass} type="range" min="1" max="10" bind:value={limit} />
 		{/if}
 	</div>
 </div>

@@ -269,7 +269,7 @@
 	<div
 		class="mb-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-card shadow-sm md:grid-cols-4"
 	>
-		{#each stats as stat, i}
+		{#each stats as stat, i (stat.label)}
 			<div
 				class="flex items-center gap-4 bg-card p-5 {i < stats.length - 1
 					? 'border-r border-border/50'
@@ -326,7 +326,7 @@
 						{potd.text}
 					</p>
 					{#if potd.interpretations?.length}
-						{#each potd.interpretations.filter((i) => i.type === 'translation' && i.language === 'en') as t}
+						{#each potd.interpretations.filter((i) => i.type === 'translation' && i.language === 'en') as t (t.content)}
 							<p class="mt-3 text-sm text-muted-foreground italic">&ldquo;{t.content}&rdquo;</p>
 						{/each}
 					{/if}
@@ -405,7 +405,7 @@
 
 	<!-- Features -->
 	<section class="mb-16 grid gap-6 md:grid-cols-4">
-		{#each [{ icon: BookOpen, title: 'Original & Authentic', desc: 'Proverbs in Amharic as they were spoken.' }, { icon: Heart, title: 'Meanings & Context', desc: 'Understand the deeper wisdom behind each.' }, { icon: Database, title: 'Developer Friendly', desc: 'Simple REST API and offline SQLite database.' }, { icon: Shuffle, title: 'Growing Daily', desc: 'New proverbs added regularly from our community.' }] as feature}
+		{#each [{ icon: BookOpen, title: 'Original & Authentic', desc: 'Proverbs in Amharic as they were spoken.' }, { icon: Heart, title: 'Meanings & Context', desc: 'Understand the deeper wisdom behind each.' }, { icon: Database, title: 'Developer Friendly', desc: 'Simple REST API and offline SQLite database.' }, { icon: Shuffle, title: 'Growing Daily', desc: 'New proverbs added regularly from our community.' }] as feature (feature.title)}
 			<div class="flex gap-4">
 				<div
 					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-muted text-primary"
@@ -445,7 +445,7 @@
 			</a>
 		</div>
 		<div class="flex flex-col gap-4">
-			{#each examples as ex}
+			{#each examples as ex (ex.id)}
 				<a
 					href={`/proverbs/${ex.id}`}
 					class="group rounded-2xl border border-border bg-card p-5 shadow-sm transition-colors hover:border-primary/50"
@@ -480,7 +480,7 @@
 						: '3,000'}+ proverbs with translations and meanings. No accounts, no tracking.
 				</p>
 				<ul class="mt-5 grid max-w-md gap-2.5 text-sm sm:grid-cols-2">
-					{#each [{ icon: BookOpen, label: 'Daily wisdom' }, { icon: Heart, label: 'Save favourites' }, { icon: Search, label: 'Search & browse' }, { icon: Database, label: 'Full offline access' }] as feature}
+					{#each [{ icon: BookOpen, label: 'Daily wisdom' }, { icon: Heart, label: 'Save favourites' }, { icon: Search, label: 'Search & browse' }, { icon: Database, label: 'Full offline access' }] as feature (feature.label)}
 						<li class="flex items-center gap-2 font-medium text-foreground">
 							<feature.icon size={15} class="shrink-0 text-primary" />
 							{feature.label}
@@ -557,7 +557,7 @@
 				<p class="pl-4 text-[#9a9f8e]">
 					&quot;interpretations&quot;: [<span class="text-[#e8e6dc]">…</span>]
 				</p>
-				<p class="text-[#9a9f8e]">{'\}'}</p>
+				<p class="text-[#9a9f8e]">}</p>
 			</div>
 		</div>
 	</section>
