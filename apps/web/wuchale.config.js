@@ -18,6 +18,7 @@ export default defineConfig({
           '/download',
           '/documentation',
           '/playground',
+          '/saved',
         ],
         // Not `true`: the built-in `localizeDefault` prefixes *every* locale
         // (`/en/about`). We keep the source locale unprefixed and only prefix

@@ -8,9 +8,12 @@
   import Seo from '$lib/seo/Seo.svelte';
   import { getSiteUrl } from '$lib/seo/site.js';
   import { localize } from '$lib/i18n.js';
+  import { getSavedState } from '$lib/stores/saved.svelte';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
+
+  const saved = getSavedState();
 
   let searchInput = $state(data.searchQuery);
   let showFilters = $state(false);
@@ -271,14 +274,19 @@
                     </span>
                   {/if}
                 </div>
-                <div class="hidden items-start gap-2 md:flex">
-                  <button onclick={(e) => { e.preventDefault(); }} class="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary" aria-label="Bookmark">
-                    <Bookmark size={14} />
+                <div class="flex items-start gap-2">
+                  <button
+                    onclick={(e) => { e.preventDefault(); e.stopPropagation(); saved.toggle({ id: proverb.id, text: proverb.text, source: proverb.source }); }}
+                    class="flex h-9 w-9 items-center justify-center rounded-full border transition-colors {saved.has(proverb.id) ? 'border-primary bg-primary text-white' : 'border-border bg-background text-muted-foreground hover:border-primary hover:bg-primary hover:text-white'}"
+                    aria-pressed={saved.has(proverb.id)}
+                    aria-label={saved.has(proverb.id) ? 'Remove from saved' : 'Save proverb'}
+                  >
+                    <Bookmark size={14} class={saved.has(proverb.id) ? 'fill-current' : ''} />
                   </button>
                   <Tooltip.Root>
                     <Tooltip.Trigger
                       onclick={(e) => { e.preventDefault(); }}
-                      class="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary"
+                      class="hidden h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary md:flex"
                       aria-label="Listen"
                     >
                       <Volume2 size={14} />

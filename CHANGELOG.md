@@ -11,6 +11,14 @@ The version is shared by every workspace package: it lives in the root
 
 ## [Unreleased]
 
+### Added
+
+- **Web — save proverbs.** The bookmark button on the proverb list now actually
+  works, the detail page has a Save button, and there's a new `/saved` page
+  (linked from the header) listing everything you've bookmarked. Like the
+  Android app, the list lives in the browser's `localStorage`, so there's no
+  account and nothing leaves the device.
+
 ### Changed
 
 - **Web — app download experience.** The landing page's app card now shows a

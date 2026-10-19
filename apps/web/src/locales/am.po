@@ -50,6 +50,7 @@ msgstr "ጥበብን ጠብቅ። ባህልን አጋራ።"
 #~ msgstr "ምሳሌዎችን በአማርኛ ወይም በእንግሊዝኛ ፈልግ..."
 
 #: src/routes/+page.svelte
+#: src/routes/proverbs/+page.svelte
 msgid "Search"
 msgstr "ፈልግ"
 
@@ -934,6 +935,7 @@ msgid "Filters"
 msgstr "ማጣሪያዎች"
 
 #: src/routes/proverbs/+page.svelte
+#: src/routes/saved/+page.svelte
 msgid "Clear all"
 msgstr "ሁሉንም አጽዳ"
 
@@ -1024,9 +1026,8 @@ msgstr "ፍለጋዎን ወይም ማጣሪያዎችዎን ያስተካክሉ።
 msgid "Clear filters"
 msgstr "ማጣሪያዎችን አጽዳ"
 
-#: src/routes/proverbs/+page.svelte
-msgid "Bookmark"
-msgstr "ዕልባት"
+#~ msgid "Bookmark"
+#~ msgstr "ዕልባት"
 
 #: src/routes/proverbs/+page.svelte
 msgid "Listen"
@@ -1727,6 +1728,8 @@ msgstr "/"
 #. /proverbs/{0}; 0: proverb.id
 #. /proverbs/{0}; 0: proverb.id
 #. /proverbs
+#. /proverbs
+#. /proverbs/[id]
 #: src/lib/components/Nav.svelte
 #: src/routes/+error.svelte
 #: src/routes/+page.svelte
@@ -1742,6 +1745,8 @@ msgstr "/"
 #: src/routes/proverbs/+page.svelte
 #: src/routes/proverbs/+page.svelte
 #: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/saved/+page.svelte
+#: src/routes/saved/+page.svelte
 #, url:main
 msgid "/proverbs/**"
 msgstr ""
@@ -1825,8 +1830,10 @@ msgstr ""
 #~ msgid "Random"
 #~ msgstr ""
 
-#~ msgid "Saved"
-#~ msgstr ""
+#: src/lib/components/Nav.svelte
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "Saved"
+msgstr "የተቀመጡ"
 
 #~ msgid "Profile"
 #~ msgstr ""
@@ -1871,3 +1878,68 @@ msgstr ""
 #: src/routes/proverbs/+page.svelte
 msgid "Coming soon"
 msgstr "በቅርቡ ይመጣል"
+
+#: src/lib/components/Nav.svelte
+#: src/lib/components/Nav.svelte
+#, url:main
+msgid "/saved"
+msgstr ""
+
+#: src/lib/components/Nav.svelte
+msgid "Saved proverbs"
+msgstr "የተቀመጡ ምሳሌዎች"
+
+#: src/routes/saved/+page.svelte
+msgid "Saved Proverbs — Abbabal"
+msgstr "የተቀመጡ ምሳሌዎች — አባባል"
+
+#: src/routes/saved/+page.svelte
+msgid "The Amharic proverbs you've bookmarked, kept locally in your browser."
+msgstr "ያስቀመጧቸው የአማርኛ ምሳሌዎች በአሳሽዎ ውስጥ በአካባቢው ይቀመጣሉ።"
+
+#: src/routes/saved/+page.svelte
+msgid "Saved Proverbs"
+msgstr "የተቀመጡ ምሳሌዎች"
+
+#: src/routes/saved/+page.svelte
+msgid "Proverbs you've bookmarked, kept on this device."
+msgstr "ያስቀመጧቸው ምሳሌዎች በዚህ መሣሪያ ላይ ይቀመጣሉ።"
+
+#: src/routes/saved/+page.svelte
+msgid "No saved proverbs yet"
+msgstr "እስካሁን ምንም የተቀመጡ ምሳሌዎች የሉም"
+
+#: src/routes/saved/+page.svelte
+msgid "Tap the bookmark on a proverb to save it here for later."
+msgstr "ለኋላ ለማስቀመጥ በምሳሌው ላይ ያለውን የዕልባት ምልክት ይጫኑ።"
+
+#~ msgid "Browse proverbs <0/>"
+#~ msgstr ""
+
+#~ msgid "<0/> saved"
+#~ msgstr ""
+
+#~ msgid "<0/> Clear all"
+#~ msgstr ""
+
+#: src/routes/proverbs/+page.svelte
+#: src/routes/saved/+page.svelte
+msgid "Remove from saved"
+msgstr "ከተቀመጡ አስወግድ"
+
+#: src/routes/proverbs/+page.svelte
+msgid "Save proverb"
+msgstr "ምሳሌ አስቀምጥ"
+
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "Save"
+msgstr "አስቀምጥ"
+
+#: src/routes/saved/+page.svelte
+msgid "Browse proverbs"
+msgstr "ምሳሌዎችን ያስሱ"
+
+#. 0: saved.items.length
+#: src/routes/saved/+page.svelte
+msgid "{0} saved"
+msgstr "{0} የተቀመጡ"

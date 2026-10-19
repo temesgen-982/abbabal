@@ -1,14 +1,17 @@
 <script lang="ts">
-  import { ArrowLeft, Copy, Share2, Shuffle, Check, BookOpenText, Calendar, Eye, Tag } from "@lucide/svelte";
+  import { ArrowLeft, Copy, Share2, Shuffle, Check, BookOpenText, Calendar, Eye, Tag, Bookmark } from "@lucide/svelte";
   import { Badge } from "$lib/components/ui/badge";
   import { Button } from "$lib/components/ui/button";
   import { goto } from "$app/navigation";
   import Seo from "$lib/seo/Seo.svelte";
   import { getSiteUrl } from "$lib/seo/site.js";
   import { localize } from "$lib/i18n.js";
+  import { getSavedState } from "$lib/stores/saved.svelte";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
+
+  const saved = getSavedState();
 
   const locale = $derived(data.locale);
   const p = $derived(data.proverb);
@@ -154,6 +157,27 @@
       // silently fail
     }
   }
+
+  function savePayload() {
+    return {
+      id: p.id,
+      text: p.text,
+      source: p.source,
+      translation: englishTranslation ?? null,
+      meaning: englishMeaning ?? null,
+    };
+  }
+
+  function toggleSave() {
+    if (p) saved.toggle(savePayload());
+  }
+
+  // A proverb saved from the list only carries its text and source. Now that
+  // the detail page has the translation and meaning, backfill them (the store
+  // ignores the call when nothing changed, so this can't loop).
+  $effect(() => {
+    if (p && saved.has(p.id)) saved.save(savePayload());
+  });
 </script>
 
 <Seo title={seoTitle} description={seoDescription} path={`/proverbs/${p.id}`} jsonLd={proverbJsonLd} />
@@ -228,6 +252,11 @@
           </div>
 
           <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
+            <Button variant="outline" class="gap-2" onclick={toggleSave}>
+              <Bookmark size={16} class={saved.has(p.id) ? "fill-primary text-primary" : ""} />
+              {saved.has(p.id) ? "Saved" : "Save"}
+            </Button>
+
             <Button variant="outline" class="gap-2" onclick={shareLink}>
               {#if shared}
                 <Check size={16} />

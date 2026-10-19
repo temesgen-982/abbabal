@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import './layout.css';
 	import Nav from '$lib/components/Nav.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import { initSaved } from '$lib/stores/saved.svelte';
 
 	let { children, data } = $props();
 
@@ -10,6 +12,9 @@
 	$effect(() => {
 		document.documentElement.lang = data.locale;
 	});
+
+	// Read the saved list from `localStorage` after hydration (see `initSaved`).
+	onMount(initSaved);
 </script>
 
 <svelte:head>

@@ -50,6 +50,7 @@ msgstr "Preserve wisdom. Share culture."
 #~ msgstr "Search proverbs in Amharic or English..."
 
 #: src/routes/+page.svelte
+#: src/routes/proverbs/+page.svelte
 msgid "Search"
 msgstr "Search"
 
@@ -934,6 +935,7 @@ msgid "Filters"
 msgstr "Filters"
 
 #: src/routes/proverbs/+page.svelte
+#: src/routes/saved/+page.svelte
 msgid "Clear all"
 msgstr "Clear all"
 
@@ -1024,9 +1026,8 @@ msgstr "Try adjusting your search or filters."
 msgid "Clear filters"
 msgstr "Clear filters"
 
-#: src/routes/proverbs/+page.svelte
-msgid "Bookmark"
-msgstr "Bookmark"
+#~ msgid "Bookmark"
+#~ msgstr "Bookmark"
 
 #: src/routes/proverbs/+page.svelte
 msgid "Listen"
@@ -1727,6 +1728,8 @@ msgstr "/"
 #. /proverbs/{0}; 0: proverb.id
 #. /proverbs/{0}; 0: proverb.id
 #. /proverbs
+#. /proverbs
+#. /proverbs/[id]
 #: src/lib/components/Nav.svelte
 #: src/routes/+error.svelte
 #: src/routes/+page.svelte
@@ -1742,6 +1745,8 @@ msgstr "/"
 #: src/routes/proverbs/+page.svelte
 #: src/routes/proverbs/+page.svelte
 #: src/routes/proverbs/[id]/+page.svelte
+#: src/routes/saved/+page.svelte
+#: src/routes/saved/+page.svelte
 #, url:main
 msgid "/proverbs/**"
 msgstr "/proverbs/**"
@@ -1825,8 +1830,10 @@ msgstr "Free & open source · Android 7.0+ · Sideload the APK (Play Store comin
 #~ msgid "Random"
 #~ msgstr "Random"
 
-#~ msgid "Saved"
-#~ msgstr "Saved"
+#: src/lib/components/Nav.svelte
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "Saved"
+msgstr "Saved"
 
 #~ msgid "Profile"
 #~ msgstr "Profile"
@@ -1871,3 +1878,68 @@ msgstr "One Platform"
 #: src/routes/proverbs/+page.svelte
 msgid "Coming soon"
 msgstr "Coming soon"
+
+#: src/lib/components/Nav.svelte
+#: src/lib/components/Nav.svelte
+#, url:main
+msgid "/saved"
+msgstr "/saved"
+
+#: src/lib/components/Nav.svelte
+msgid "Saved proverbs"
+msgstr "Saved proverbs"
+
+#: src/routes/saved/+page.svelte
+msgid "Saved Proverbs — Abbabal"
+msgstr "Saved Proverbs — Abbabal"
+
+#: src/routes/saved/+page.svelte
+msgid "The Amharic proverbs you've bookmarked, kept locally in your browser."
+msgstr "The Amharic proverbs you've bookmarked, kept locally in your browser."
+
+#: src/routes/saved/+page.svelte
+msgid "Saved Proverbs"
+msgstr "Saved Proverbs"
+
+#: src/routes/saved/+page.svelte
+msgid "Proverbs you've bookmarked, kept on this device."
+msgstr "Proverbs you've bookmarked, kept on this device."
+
+#: src/routes/saved/+page.svelte
+msgid "No saved proverbs yet"
+msgstr "No saved proverbs yet"
+
+#: src/routes/saved/+page.svelte
+msgid "Tap the bookmark on a proverb to save it here for later."
+msgstr "Tap the bookmark on a proverb to save it here for later."
+
+#~ msgid "Browse proverbs <0/>"
+#~ msgstr "Browse proverbs <0/>"
+
+#~ msgid "<0/> saved"
+#~ msgstr "<0/> saved"
+
+#~ msgid "<0/> Clear all"
+#~ msgstr "<0/> Clear all"
+
+#: src/routes/proverbs/+page.svelte
+#: src/routes/saved/+page.svelte
+msgid "Remove from saved"
+msgstr "Remove from saved"
+
+#: src/routes/proverbs/+page.svelte
+msgid "Save proverb"
+msgstr "Save proverb"
+
+#: src/routes/proverbs/[id]/+page.svelte
+msgid "Save"
+msgstr "Save"
+
+#: src/routes/saved/+page.svelte
+msgid "Browse proverbs"
+msgstr "Browse proverbs"
+
+#. 0: saved.items.length
+#: src/routes/saved/+page.svelte
+msgid "{0} saved"
+msgstr "{0} saved"

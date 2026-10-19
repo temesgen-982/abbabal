@@ -1,10 +1,13 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { Sun, Moon, Languages } from '@lucide/svelte';
+  import { Sun, Moon, Languages, Bookmark } from '@lucide/svelte';
   import type { Locale } from '../../locales/data.js';
   import { switchLocaleUrl } from '../i18n.js';
+  import { getSavedState } from '../stores/saved.svelte';
 
   let { locale = 'en' }: { locale?: Locale } = $props();
+
+  const saved = getSavedState();
 
   let dark = $state(false);
 
@@ -30,6 +33,7 @@
   const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Proverbs', href: '/proverbs' },
+    { label: 'Saved', href: '/saved' },
     { label: 'Download', href: '/download' },
     { label: 'About', href: '/about' },
     { label: 'API', href: '/documentation' },
@@ -70,6 +74,20 @@
     </nav>
 
     <div class="flex items-center gap-3">
+      <a
+        href="/saved"
+        class="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:hidden"
+        aria-label="Saved proverbs"
+      >
+        <Bookmark size={16} class={saved.items.length ? 'fill-primary text-primary' : ''} />
+        {#if saved.items.length > 0}
+          <span
+            class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground"
+          >
+            {saved.items.length}
+          </span>
+        {/if}
+      </a>
       <a
         href={switchHref}
         hreflang={target}
