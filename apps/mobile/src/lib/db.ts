@@ -5,6 +5,7 @@ import type { Interpretation, PaginatedProverbs, Proverb } from './api';
 
 const DB_NAME = 'proverbs';
 const LAST_SYNC_KEY = 'abbabal.lastSyncAt';
+export const DATABASE_SYNC_EVENT = 'abbabal:database-sync';
 
 // How many proverbs to request/upsert per round trip during a sync.
 const SYNC_BATCH_SIZE = 50;
@@ -335,6 +336,9 @@ export async function syncDatabase(baseUrl: string): Promise<boolean> {
 
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(LAST_SYNC_KEY, new Date().toISOString());
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event(DATABASE_SYNC_EVENT));
     }
     return true;
   } catch (e) {

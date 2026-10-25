@@ -9,7 +9,7 @@ The version is shared by every workspace package: it lives in the root
 `package.json` and is mirrored by the apps, as well as the Android
 `versionName` / `versionCode`. See the README for the release process.
 
-## [Unreleased]
+## [0.2.0] - 2026-10-25
 
 ### Added
 
@@ -41,6 +41,9 @@ The version is shared by every workspace package: it lives in the root
   `/proverbs` field had no submit button at all (Enter only). Both now show a
   spinner and a pressed/disabled state the moment they're submitted, plus a
   keyboard focus ring.
+- **Mobile — feed refresh.** The homepage now refreshes after background or
+  manual database syncs, responds when the app returns to the foreground, and
+  supports pull-to-refresh from the top of the feed.
 
 ## [0.1.0] - 2026-10-16
 

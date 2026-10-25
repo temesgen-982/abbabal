@@ -1,10 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { api, type Proverb } from '$lib/api';
-  import { Bookmark, ArrowRight } from '@lucide/svelte';
+  import { Bookmark, ArrowRight, RefreshCw } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { accentFor } from '$lib/proverb-accent';
   import { getSavedState } from '$lib/stores/saved.svelte';
+  import { BASE_URL } from '$lib/api';
+  import { DATABASE_SYNC_EVENT, isNativePlatform, syncDatabase } from '$lib/db';
 
   const saved = getSavedState();
 
@@ -16,16 +18,22 @@
   let error = $state('');
   let showBackToTop = $state(false);
   let sentinel = $state<HTMLDivElement>(null!);
+  let refreshPending = false;
+  let feedGeneration = 0;
+  let pullDistance = $state(0);
+  let refreshing = $state(false);
   const LIMIT = 40;
 
   const hasMore = $derived(proverbs.length < total);
 
   async function loadMore() {
     if (loading) return;
+    const generation = feedGeneration;
     loading = true;
     error = '';
     try {
       const data = await api.proverbs.list(page, LIMIT);
+      if (generation !== feedGeneration) return;
       total = data.total;
       proverbs = [...proverbs, ...data.results];
       page += 1;
@@ -33,7 +41,38 @@
       error = 'Failed to load proverbs. Please try again.';
     } finally {
       loading = false;
-      initialLoading = false;
+      if (generation === feedGeneration) initialLoading = false;
+      if (refreshPending) {
+        refreshPending = false;
+        refreshFeed();
+      }
+    }
+  }
+
+  function refreshFeed() {
+    feedGeneration += 1;
+    proverbs = [];
+    page = 1;
+    total = 0;
+    error = '';
+    initialLoading = true;
+    if (loading) {
+      refreshPending = true;
+      return;
+    }
+    loadMore();
+  }
+
+  async function refreshFromPull() {
+    if (refreshing) return;
+    refreshing = true;
+    pullDistance = 72;
+    try {
+      const synced = await syncDatabase(BASE_URL);
+      if (!isNativePlatform() || !synced) refreshFeed();
+    } finally {
+      refreshing = false;
+      pullDistance = 0;
     }
   }
 
@@ -80,13 +119,68 @@
   });
 
   onMount(() => {
+    let touchStartY = 0;
+    let pulling = false;
+
+    function onTouchStart(event: TouchEvent) {
+      if (window.scrollY === 0 && !refreshing) {
+        touchStartY = event.touches[0].clientY;
+        pulling = true;
+      }
+    }
+
+    function onTouchMove(event: TouchEvent) {
+      if (!pulling) return;
+      if (window.scrollY > 0) {
+        pulling = false;
+        pullDistance = 0;
+        return;
+      }
+      const distance = event.touches[0].clientY - touchStartY;
+      if (distance <= 0) {
+        pulling = false;
+        pullDistance = 0;
+        return;
+      }
+      event.preventDefault();
+      pullDistance = Math.min(distance * 0.5, 96);
+    }
+
+    function onTouchEnd() {
+      if (pulling && pullDistance >= 72) void refreshFromPull();
+      pulling = false;
+      if (!refreshing) pullDistance = 0;
+    }
+
+    const onDatabaseSync = () => refreshFeed();
+    window.addEventListener(DATABASE_SYNC_EVENT, onDatabaseSync);
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
     loadMore();
+    return () => {
+      window.removeEventListener(DATABASE_SYNC_EVENT, onDatabaseSync);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+    };
   });
 </script>
 
 
 <!-- Feed -->
 <div class="max-w-lg mx-auto px-4 py-4 pb-24">
+
+  {#if pullDistance > 0 || refreshing}
+    <div
+      class="flex items-center justify-center gap-2 overflow-hidden text-xs text-muted-foreground transition-[height]"
+      style="height: {refreshing ? '48px' : `${pullDistance}px`};"
+      aria-live="polite"
+    >
+      <RefreshCw size={15} class={refreshing ? 'animate-spin' : ''} />
+      <span>{refreshing ? 'Refreshing' : pullDistance >= 72 ? 'Release to refresh' : 'Pull to refresh'}</span>
+    </div>
+  {/if}
 
   {#if initialLoading}
     <div class="flex justify-center items-center py-20">

@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import './layout.css';
   import { page } from '$app/state';
   import { App } from '@capacitor/app';
   import { goto } from '$app/navigation';
   import { House, Search, Shuffle, Bookmark, User, Menu, X, ArrowLeft, Languages, Sun, Moon } from '@lucide/svelte';
   import { getLocaleState } from '$lib/stores/locale.svelte';
+  import { BASE_URL } from '$lib/api';
+  import { getLastSyncAt, syncDatabase } from '$lib/db';
 
   let { children } = $props();
   let menuOpen = $state(false);
@@ -48,12 +51,28 @@
     setTimeout(() => { menuOpen = false; }, 300);
   }
 
-  App.addListener('backButton', ({ canGoBack }) => {
-    if (canGoBack) {
-      window.history.back();
-    } else {
-      App.exitApp();
-    }
+  async function maybeSync() {
+    const last = getLastSyncAt();
+    if (last && Date.now() - new Date(last).getTime() < 24 * 60 * 60 * 1000) return;
+    await syncDatabase(BASE_URL);
+  }
+
+  onMount(() => {
+    const backButton = App.addListener('backButton', ({ canGoBack }) => {
+      if (canGoBack) {
+        window.history.back();
+      } else {
+        App.exitApp();
+      }
+    });
+    const appState = App.addListener('appStateChange', ({ isActive }) => {
+      if (isActive) void maybeSync();
+    });
+
+    return () => {
+      backButton.then((listener) => listener.remove());
+      appState.then((listener) => listener.remove());
+    };
   });
 
   const tabs = [

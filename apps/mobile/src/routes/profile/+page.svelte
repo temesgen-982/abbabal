@@ -9,7 +9,7 @@
 
   const saved = getSavedState();
 
-  let appVersion = $state('0.0.1');
+  let appVersion = $state('0.1.0');
   let syncing = $state(false);
   let syncError = $state('');
   let syncOk = $state(false);
