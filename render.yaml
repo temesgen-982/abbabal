@@ -10,8 +10,6 @@ services:
         value: '22'
       - key: PNPM_VERSION
         value: '10.15.0'
-      - key: CORS_ORIGIN
-        value: 'https://abbabal-api-web.vercel.app'
       - key: JWT_SECRET
         sync: false
       - key: JWT_REFRESH_SECRET

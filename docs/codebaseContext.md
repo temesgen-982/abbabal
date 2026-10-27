@@ -138,7 +138,6 @@ pnpm drizzle:studio   # Open Drizzle Studio (DB GUI)
 | `JWT_EXPIRES_IN` | Access token lifetime (default: 15m) |
 | `JWT_REFRESH_SECRET` | Refresh token signing secret |
 | `JWT_REFRESH_EXPIRES_IN` | Refresh token lifetime (default: 1w) |
-| `CORS_ORIGIN` | Allowed CORS origins |
 | `PORT` | Server port (default: 3000) |
 | `ADMIN_EMAIL` | Admin seed email |
 | `ADMIN_PASSWORD` | Admin seed password |

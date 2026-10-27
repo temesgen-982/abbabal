@@ -1,29 +1,19 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 
-// Origins the Capacitor app shell can load from. Capacitor serves the web
-// bundle from `https://localhost` on Android and `capacitor://localhost` on
-// iOS, so these must always be allowed for the mobile app's `fetch` calls.
-const APP_SHELL_ORIGINS = [
-  'http://localhost',
-  'http://localhost:5173',
-  'https://localhost',
-  'capacitor://localhost',
-];
-
 export function configureApp(app: INestApplication) {
-  const configuredOrigins = (process.env.CORS_ORIGIN ?? '')
-    .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-
-  const origins = Array.from(
-    new Set([...APP_SHELL_ORIGINS, ...configuredOrigins]),
-  );
-
+  // The archive is public and read-only, so every origin is allowed. CORS was
+  // never access control here: scripts ignore it entirely, and an allowlist
+  // only broke legitimate browser clients (including the Capacitor app shell,
+  // which loads from `https://localhost` and `capacitor://localhost`).
+  // `credentials` stays off because `origin: '*'` and credentials are mutually
+  // exclusive per the spec.
   app.enableCors({
-    origin: origins,
-    credentials: true,
+    origin: '*',
+    methods: ['GET', 'HEAD', 'OPTIONS'],
+    exposedHeaders: ['Content-Disposition', 'ETag'],
+    maxAge: 86400,
   });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
