@@ -134,10 +134,6 @@ pnpm drizzle:studio   # Open Drizzle Studio (DB GUI)
 | Variable | Description |
 |----------|-------------|
 | `DATABASE_URL` | PostgreSQL connection string |
-| `JWT_SECRET` | Access token signing secret |
-| `JWT_EXPIRES_IN` | Access token lifetime (default: 15m) |
-| `JWT_REFRESH_SECRET` | Refresh token signing secret |
-| `JWT_REFRESH_EXPIRES_IN` | Refresh token lifetime (default: 1w) |
 | `PORT` | Server port (default: 3000) |
 | `ADMIN_EMAIL` | Admin seed email |
 | `ADMIN_PASSWORD` | Admin seed password |
