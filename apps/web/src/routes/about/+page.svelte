@@ -98,11 +98,7 @@
 			<div
 				class="h-[100px] w-[100px] shrink-0 overflow-hidden rounded-full border-2 border-border bg-muted"
 			>
-				<img
-					src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
-					alt="Temesgen Adane"
-					class="h-full w-full object-cover"
-				/>
+				<img src="/pic.JPG" alt="Temesgen Adane" class="h-full w-full object-cover object-top" />
 			</div>
 			<div>
 				<h4 class="text-base font-bold">Temesgen Adane</h4>
